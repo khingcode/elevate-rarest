@@ -136,46 +136,46 @@ footer { color: #6f6f6f; font-size: 12px; border-top: 1px solid var(--line); pad
     <div class="meta" id="meta"></div>
   </header>
   <main id="app" aria-live="polite"></main>
-  <footer>Every answer has a fixed rarity tier set by the Elevate team. The higher the tier, the more points it scores.</footer>
+  <footer>Every answer has a fixed tier set by the Elevate team. The higher the tier, the more points it scores.</footer>
 </div>
 
 <script>
 /* ---------- CONTENT -------------------------------------------------
    Format: "Answer:tier|alias|alias"
-   Tier 1 Common · 2 Elevate Go-er · 3 Servant · 4 Ministry Head · 5 Youth Coordinator
+   Tier 1 Elevate Go-er · 2 Servant · 3 Ministry Head · 4 Youth Coordinator
    Honorifics (kuya, tito, ate...) are ignored when matching, so "Earl" matches "Kuya Earl". */
 const BANK = [
  { id:"speaker", cat:"Elevate", text:"Name any speaker who spoke in Elevate before", a:[
-   "Kuya Earl:2|earl","Kuya Cart:2|cart","Kuya Raf:2|raf",
-   "Kuya Karl:3|karl","Kuya Yves:3|yves","Kuya Drich:3|drich",
-   "Kuya Khing:4|khing","Kuya Nico Tiu:4|nico tiu|nico","Kuya Kyle:4|kyle",
-   "Kuya Ken:5|ken","Tito Dondi:5|dondi","Kuya Mark:5|mark"] },
+   "Kuya Earl:1|earl","Kuya Cart:1|cart","Kuya Raf:1|raf",
+   "Kuya Karl:2|karl","Kuya Yves:2|yves","Kuya Drich:2|drich",
+   "Kuya Khing:3|khing","Kuya Nico Tiu:3|nico tiu|nico","Kuya Kyle:3|kyle",
+   "Kuya Ken:4|ken","Tito Dondi:4|dondi","Kuya Mark:4|mark"] },
  { id:"exalt", cat:"Exalt", text:"Name one member from the Exalt ministry", a:[
-   "Kuya Khing:2|khing","Kuya Yves:2|yves","Kuya Shiji:2|shiji","Kuya Raf:2|raf",
-   "Deborah:3|deb","Kuya Nico:3|nico","Kuya Rhoyd:3|rhoyd",
-   "John:4","Tan2:4|tan|tan 2",
-   "Carla:5","Kuya Duke:5|duke"] },
+   "Kuya Khing:1|khing","Kuya Yves:1|yves","Kuya Shiji:1|shiji","Kuya Raf:1|raf",
+   "Deborah:2|deb","Kuya Nico:2|nico","Kuya Rhoyd:2|rhoyd",
+   "John:3","Tan2:3|tan|tan 2",
+   "Carla:4","Kuya Duke:4|duke"] },
  /* Bible characters: tiers are my estimate of how often youth leaders preach them. Edit freely. */
  { id:"bible", cat:"Bible", text:"Name a Bible character youth leaders preach about", a:[
    "Jesus:1|jesus christ","David:1","Joseph:1","Daniel:1","Moses:1",
-   "Paul:2|apostle paul","Peter:2|simon peter","Esther:2","Timothy:2","Joshua:2","Abraham:2|abram","Solomon:2","Noah:2","Samson:2",
-   "Ruth:3","Nehemiah:3","Samuel:3","Gideon:3","Jonah:3","Elijah:3","Job:3","Isaiah:3","John:3|apostle john",
-   "Jeremiah:4","Mary:4|virgin mary","Caleb:4","Hannah:4","Barnabas:4","Deborah:4","Stephen:4","Elisha:4","Mordecai:4","Naomi:4","Thomas:4|doubting thomas","Zacchaeus:4","Martha:4","Matthew:4","Rahab:4","Nicodemus:4","Lazarus:4","Mary Magdalene:4","Lydia:4",
-   "Jabez:5","Josiah:5","Epaphras:5","Dorcas:5|tabitha","Mephibosheth:5","Ehud:5","Silas:5","Priscilla:5|aquila","Jehoshaphat:5","Onesimus:5","Obed-Edom:5|obededom","Uzziah:5"] },
+   "Paul:1|apostle paul","Peter:1|simon peter","Esther:1","Timothy:1","Joshua:1","Abraham:1|abram","Solomon:1","Noah:1","Samson:1",
+   "Ruth:2","Nehemiah:2","Samuel:2","Gideon:2","Jonah:2","Elijah:2","Job:2","Isaiah:2","John:2|apostle john",
+   "Jeremiah:3","Mary:3|virgin mary","Caleb:3","Hannah:3","Barnabas:3","Deborah:3","Stephen:3","Elisha:3","Mordecai:3","Naomi:3","Thomas:3|doubting thomas","Zacchaeus:3","Martha:3","Matthew:3","Rahab:3","Nicodemus:3","Lazarus:3","Mary Magdalene:3","Lydia:3",
+   "Jabez:4","Josiah:4","Epaphras:4","Dorcas:4|tabitha","Mephibosheth:4","Ehud:4","Silas:4","Priscilla:4|aquila","Jehoshaphat:4","Onesimus:4","Obed-Edom:4|obededom","Uzziah:4"] },
  /* Only these three Elevate Exalt songs are confirmed (2022 EP "Reliably True"). Tiers are placeholders: send me the full list and real tiers. */
  { id:"song", cat:"Worship", text:"Name an Elevate Exalt song", a:[
-   "Reliably True:1","All Glorious:2","Land of the Living:3"] },
+   "Reliably True:1","All Glorious:1","Land of the Living:2"] },
  { id:"bring", cat:"Conference", text:"Name something you'd bring to a three-day conference", a:[
    "Notebook:1|journal","Pen:1|ballpen|ballpoint","Bible:1","Water Bottle:1|tumbler|water","Powerbank:1|power bank|charger|phone charger","Jacket:1|hoodie",
-   "Snacks:2|food","Towel:2","Extra Clothes:2|clothes|change of clothes","Toiletries:2|toothbrush","Umbrella:2","ID:2|lanyard id|valid id","Phone:2|cellphone|mobile phone",
-   "Earphones:3|headphones|earbuds","Medicine:3|meds|vitamins","Face Mask:3|mask","Tissue:3|wet wipes|wipes","Cash:3|money|pera","Sunscreen:3","Pillow:3","Camera:3","Wallet:3",
-   "Handheld Fan:4|fan|pamaypay","Slippers:4|flip flops|tsinelas","Blanket:4","Alcohol:4|sanitizer|hand sanitizer","Laptop:4","Sticky Notes:4","Highlighters:4|highlighter",
-   "Banig:5|sleeping mat","Candle:5|candles","Whistle:5","Folding Chair:5|chair","3-in-1 Coffee:5|instant coffee|coffee","Ear Plugs:5|earplugs","Sleeping Bag:5","Mosquito Repellent:5|off lotion|insect repellent","Cup Noodles:5|noodles|instant noodles","Flashlight:5|torch"] }
+   "Snacks:1|food","Towel:1","Extra Clothes:1|clothes|change of clothes","Toiletries:1|toothbrush","Umbrella:1","ID:1|lanyard id|valid id","Phone:1|cellphone|mobile phone",
+   "Earphones:2|headphones|earbuds","Medicine:2|meds|vitamins","Face Mask:2|mask","Tissue:2|wet wipes|wipes","Cash:2|money|pera","Sunscreen:2","Pillow:2","Camera:2","Wallet:2",
+   "Handheld Fan:3|fan|pamaypay","Slippers:3|flip flops|tsinelas","Blanket:3","Alcohol:3|sanitizer|hand sanitizer","Laptop:3","Sticky Notes:3","Highlighters:3|highlighter",
+   "Banig:4|sleeping mat","Candle:4|candles","Whistle:4","Folding Chair:4|chair","3-in-1 Coffee:4|instant coffee|coffee","Ear Plugs:4|earplugs","Sleeping Bag:4","Mosquito Repellent:4|off lotion|insect repellent","Cup Noodles:4|noodles|instant noodles","Flashlight:4|torch"] }
 ];
 
 /* ---------- helpers ------------------------------------------------ */
-const TIERS = ["Common", "Elevate Go-er", "Servant", "Ministry Head", "Youth Coordinator"];
-const TIER_PTS = [20, 40, 60, 80, 100];
+const TIERS = ["Elevate Go-er", "Servant", "Ministry Head", "Youth Coordinator"];
+const TIER_PTS = [25, 50, 75, 100];
 const $ = s => document.querySelector(s);
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
 const HONOR = /^(kuya|tito|tita|ate|bro|sis)(?=.{2})/;
@@ -214,7 +214,7 @@ const EPOCH = Date.UTC(2026, 10, 18);
 const now = new Date();
 const dayN = Math.floor((Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()) - EPOCH) / 864e5);
 const DATE = now.toISOString().slice(0, 10);
-const DAYKEY = DATE + ":v2";   // bump when the question set changes so old saves are ignored
+const DAYKEY = DATE + ":v3";   // bump when the question set changes so old saves are ignored
 const PUZZLE = Math.max(1, dayN + 1);
 const PER_DAY = 5;
 function rng(seed) { return () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
@@ -247,8 +247,8 @@ const saved = lsGet(); if (saved && Array.isArray(saved.answers)) state = saved;
 
 const total = () => state.answers.reduce((s, a) => s + a.pts, 0);
 const label = t => TIERS[t];
-const pips = t => `<span class="pips" aria-hidden="true">${[0,1,2,3,4].map(i => `<i class="${i <= t ? "on" : ""}"></i>`).join("")}</span>`;
-const tierOf = t => t >= 450 ? "Rooftop" : t >= 400 ? "Top Floor" : t >= 330 ? "Sky Lobby" : t >= 250 ? "Mid-Rise" : t >= 150 ? "Mezzanine" : "Lobby";
+const pips = t => `<span class="pips" aria-hidden="true">${TIERS.map((_, i) => `<i class="${i <= t ? "on" : ""}"></i>`).join("")}</span>`;
+const tierOf = t => t >= 450 ? "Rooftop" : t >= 400 ? "Top Floor" : t >= 330 ? "Sky Lobby" : t >= 250 ? "Mid-Rise" : t >= 175 ? "Mezzanine" : "Lobby";
 const share = (qid, name) => (liveN[qid] || 0) >= 5 ? Math.round(((live[qid] || {})[name] || 0) / liveN[qid] * 100) : null;
 
 /* ---------- live data (shared stats) ------------------------------- */
@@ -320,7 +320,7 @@ function render() {
       <p class="lead">${QS.length} questions about Elevate and CCF. Pick the answer almost nobody else thinks of. The rarer the answer, the higher you ride.</p>
       <ol class="how">
         <li><b>01</b><span>Type any answer. If it is not on the board, it does not count and you can try again.</span></li>
-        <li><b>02</b><span>Every answer sits in one of five tiers, from Common up to Youth Coordinator. Higher tier, more points.</span></li>
+        <li><b>02</b><span>Every answer sits in one of four tiers, from Elevate Go-er up to Youth Coordinator. Higher tier, more points.</span></li>
         <li><b>03</b><span>One run per day. Questions change at 00:00 UTC.</span></li>
       </ol>
       <button class="btn" id="go"><span>${started ? "Resume run" : "Take the lift"}</span></button></div>`;
@@ -353,14 +353,14 @@ function askView(msg = "", val = "") {
 function revealView() {
   const i = state.answers.length - 1, q = QS[i], a = state.answers[i];
   const counts = TIERS.map((_, t) => q.items.filter(it => it.tier === t).length);
-  const row = t => `<li class="${t === a.tier ? "me" : ""}"><span class="nm">${TIERS[t]}</span><span class="pc">${counts[t]} answer${counts[t] === 1 ? "" : "s"}</span><div class="track"><div class="fill" style="width:${(t + 1) * 20}%"></div></div></li>`;
+  const row = t => `<li class="${t === a.tier ? "me" : ""}"><span class="nm">${TIERS[t]}</span><span class="pc">${counts[t]} answer${counts[t] === 1 ? "" : "s"}</span><div class="track"><div class="fill" style="width:${(t + 1) * 25}%"></div></div></li>`;
   const sh = share(q.id, a.a);
   const last = i === QS.length - 1;
   $("#app").innerHTML = `<div class="reveal">
     ${floors(i, true)}
     <p class="eyebrow">${esc(q.text)}</p>
     <div class="verdict"><div><span class="tag">${label(a.tier)}</span>${pips(a.tier)}<div class="you">${esc(a.a)}</div></div><div class="pts">+${a.pts} pts</div></div>
-    <ul class="bars" aria-label="Rarity tiers">${[4,3,2,1,0].map(row).join("")}</ul>
+    <ul class="bars" aria-label="Rarity tiers">${TIERS.map((_, t) => t).reverse().map(row).join("")}</ul>
     ${sh !== null ? `<p class="hint">${sh}% of players picked ${esc(a.a)}.</p>` : ""}
     <button class="btn" id="nx"><span>${last ? "Reach the roof" : "Next floor"}</span></button></div>`;
   $("#nx").onclick = () => { stage = last ? "done" : "ask"; render(); $("#app").scrollIntoView({ block: "start" }); };
@@ -368,7 +368,7 @@ function revealView() {
 }
 
 function shareText() {
-  const sq = state.answers.map(a => ["⬛", "⬜", "🟨", "🟧", "🟥"][a.tier]).join("");
+  const sq = state.answers.map(a => ["⬜", "🟨", "🟧", "🟥"][a.tier]).join("");
   return `ELEVATE RAREST No. ${PUZZLE}\n${total()}/${QS.length * 100} · ${tierOf(total())}\n${sq}`;
 }
 function doneView() {
