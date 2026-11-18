@@ -64,6 +64,8 @@ header.top { display: flex; justify-content: space-between; align-items: center;
 .meta b { color: var(--fg); font-weight: 700; }
 
 .right { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
+.toggles { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+.snd[hidden] { display: none; }
 .snd { appearance: none; background: transparent; border: 1px solid var(--line); color: var(--dim); font-family: var(--mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; padding: 4px 10px; cursor: pointer; }
 .snd:hover { color: var(--fg); border-color: var(--fg); }
 .snd[aria-pressed="false"] { color: #666; text-decoration: line-through; }
@@ -180,11 +182,12 @@ footer { color: #6f6f6f; font-size: 12px; border-top: 1px solid var(--line); pad
 }
 </style>
 
+<audio id="bgm" src="music.mp3" loop preload="none"></audio>
 <div class="bg" id="bg" aria-hidden="true"><div class="streaks"></div><div class="track" id="track"></div></div>
 <div class="shaft">
   <header class="top">
     <h1 class="wm sm" aria-label="Elevate">EL<span style="display:contents">E</span>V<svg class="chev" viewBox="0 0 100 100" aria-hidden="true"><path d="M0 100 L36 0 L64 0 L100 100 L74 100 L50 28 L26 100Z"/></svg>TE</h1>
-    <div class="right"><div class="meta" id="meta"></div><button class="snd" id="snd" type="button" aria-pressed="true">Sound on</button></div>
+    <div class="right"><div class="meta" id="meta"></div><div class="toggles"><button class="snd" id="mus" type="button" aria-pressed="true" hidden>Music on</button><button class="snd" id="snd" type="button" aria-pressed="true">Sound on</button></div></div>
   </header>
   <div class="owner" id="owner" hidden><span>Owner tools · only you see this</span><button class="btn ghost" id="replay" type="button"><span>Replay today</span></button></div>
   <main id="app" aria-live="polite"></main>
@@ -678,6 +681,23 @@ const hashOwner = () => location.hash === OWNER_HASH;
 function paintOwner() { $("#owner").hidden = !(isOwner || hashOwner()); }
 addEventListener("hashchange", paintOwner); paintOwner();
 $("#replay").onclick = () => { Sfx.tap(); replay(); };
+/* background music: starts on the first tap (browsers block audio before that), quiet by default */
+const bgm = $("#bgm"), musBtn = $("#mus"), MUSIC_VOL = 0.14;
+let musicMuted = false, musicOK = true, musicStarted = false;
+try { musicMuted = localStorage.getItem("elevate-rarest:music-muted") === "1"; } catch {}
+bgm.volume = MUSIC_VOL;
+function paintMus() { musBtn.textContent = musicMuted ? "Music off" : "Music on"; musBtn.setAttribute("aria-pressed", String(!musicMuted)); }
+function playMusic() { if (musicMuted || !musicOK) return; const p = bgm.play(); if (p && p.catch) p.catch(() => {}); }
+bgm.addEventListener("error", () => { musicOK = false; musBtn.hidden = true; });
+bgm.addEventListener("canplay", () => { musBtn.hidden = false; }, { once: true });
+musBtn.hidden = false; paintMus();
+musBtn.onclick = () => {
+  musicMuted = !musicMuted; try { localStorage.setItem("elevate-rarest:music-muted", musicMuted ? "1" : "0"); } catch {}
+  if (musicMuted) bgm.pause(); else playMusic();
+  paintMus(); Sfx.tap();
+};
+document.addEventListener("pointerdown", () => { if (!musicStarted) { musicStarted = true; playMusic(); } }, { once: true });
+document.addEventListener("visibilitychange", () => { if (document.hidden) bgm.pause(); else if (musicStarted) playMusic(); });
 const sndBtn = $("#snd");
 function paintSnd() { sndBtn.textContent = Sfx.muted() ? "Sound off" : "Sound on"; sndBtn.setAttribute("aria-pressed", String(!Sfx.muted())); }
 sndBtn.onclick = () => { Sfx.toggle(); paintSnd(); }; paintSnd();
