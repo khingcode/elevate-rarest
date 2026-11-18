@@ -136,43 +136,57 @@ footer { color: #6f6f6f; font-size: 12px; border-top: 1px solid var(--line); pad
     <div class="meta" id="meta"></div>
   </header>
   <main id="app" aria-live="polite"></main>
-  <footer>Baseline rarity comes from a launch survey. Every player who finishes a day shifts the numbers: each live player counts for 10 survey votes.</footer>
+  <footer>Every answer has a fixed rarity tier set by the Elevate team. The higher the tier, the more points it scores.</footer>
 </div>
 
 <script>
 /* ---------- CONTENT -------------------------------------------------
-   Format: "Answer:weight|alias|alias". Weight = how common the answer is.
-   Replace the ELEVATE roster below with your real speakers. */
-const ELEVATE = { id: "elevate", cat: "Elevate", text: "Name one speaker from Elevate", a: [
-  "Speaker One:120","Speaker Two:100","Speaker Three:90","Speaker Four:70","Speaker Five:60",
-  "Speaker Six:40","Speaker Seven:25","Speaker Eight:12","Speaker Nine:6","Speaker Ten:3"] };
-
+   Format: "Answer:tier|alias|alias"
+   Tier 1 Common · 2 Elevate Go-er · 3 Servant · 4 Ministry Head · 5 Youth Coordinator
+   Honorifics (kuya, tito, ate...) are ignored when matching, so "Earl" matches "Kuya Earl". */
 const BANK = [
- { id:"sa", cat:"Geography", text:"Name a country in South America", a:["Brazil:260","Argentina:210","Chile:110","Colombia:100","Peru:90","Venezuela:50","Ecuador:40","Bolivia:35","Uruguay:25","Paraguay:22","Guyana:5","Suriname:3"] },
- { id:"red", cat:"Food", text:"Name a fruit that is red", a:["Strawberry:250","Apple:220","Cherry:120","Raspberry:80","Watermelon:70","Pomegranate:45","Tomato:40","Cranberry:40","Grape:30|red grape","Blood Orange:12","Dragon Fruit:8","Redcurrant:6|red currant","Persimmon:4","Goji Berry:3|goji","Lingonberry:3"] },
- { id:"code", cat:"Tech", text:"Name a programming language", a:["Python:250","JavaScript:220|js","Java:140","C++:90|cpp","C:70","C#:60|csharp|c sharp","PHP:40","Swift:30","Ruby:25","Go:25|golang","TypeScript:20|ts","Rust:15","Kotlin:15","Perl:5","Haskell:3","COBOL:3","Lisp:2","Fortran:2","Elixir:2","Brainfuck:1"] },
- { id:"pixar", cat:"Film", text:"Name a Pixar movie", a:["Toy Story:260","Finding Nemo:150","Up:100","Inside Out:90","Cars:80","Monsters Inc:80|monsters, inc|monsters","The Incredibles:60|incredibles","Coco:40","Ratatouille:35","WALL-E:35|wall e|walle","Brave:15","A Bug's Life:12|bugs life","Soul:8","Luca:6","Onward:4","Turning Red:4","The Good Dinosaur:3","Elemental:3","Lightyear:2"] },
- { id:"dog", cat:"Animals", text:"Name a dog breed", a:["Labrador:180|lab|labrador retriever","Golden Retriever:160|golden","German Shepherd:110|alsatian","Poodle:90","Bulldog:80","Beagle:70","Chihuahua:60","Pug:50","Husky:50|siberian husky","Corgi:40|welsh corgi","Dachshund:40|sausage dog","Rottweiler:30","Dalmatian:25","Boxer:20","Border Collie:15","Shih Tzu:12","Great Dane:10","Pomeranian:8","Basenji:2","Xoloitzcuintli:1"] },
- { id:"mtn", cat:"Geography", text:"Name a mountain", a:["Everest:380|mount everest","K2:80","Kilimanjaro:80|mount kilimanjaro","Fuji:60|mount fuji","Matterhorn:60","Mont Blanc:40","Mount Rushmore:40|rushmore","Denali:30|mount mckinley|mckinley","Olympus:25|mount olympus","Kosciuszko:20|mount kosciuszko","Ben Nevis:15","Aconcagua:15","Table Mountain:15","Annapurna:10","Etna:8|mount etna","Vesuvius:8|mount vesuvius","Elbrus:5","Lhotse:5","Kangchenjunga:4","Vinson:2|mount vinson","Cho Oyu:2"] },
- { id:"coffee", cat:"Food", text:"Name a coffee drink", a:["Latte:250","Cappuccino:200","Espresso:150","Americano:90","Flat White:80","Mocha:80","Macchiato:50","Cold Brew:25","Frappuccino:20","Affogato:12","Cortado:12","Long Black:10","Irish Coffee:8","Turkish Coffee:6","Piccolo:5","Ristretto:4","Doppio:3","Lungo:3","Red Eye:2"] },
- { id:"planet", cat:"Space", text:"Name a planet", a:["Mars:230","Jupiter:150","Saturn:150","Venus:120","Earth:110","Mercury:90","Neptune:70","Uranus:60","Pluto:20"] },
- { id:"inst", cat:"Music", text:"Name a musical instrument", a:["Guitar:250","Piano:220","Drums:140","Violin:100","Flute:60","Saxophone:40|sax","Trumpet:40","Clarinet:25","Cello:20","Harp:15","Bass:15|bass guitar","Ukulele:15","Trombone:12","Banjo:10","Oboe:8","Accordion:8","Harmonica:8","Xylophone:8","Tuba:6","Bassoon:4","Sitar:4","Didgeridoo:4","Theremin:3","Kazoo:2","Hurdy-Gurdy:1"] },
- { id:"bard", cat:"Books", text:"Name a Shakespeare play", a:["Hamlet:280","Romeo and Juliet:270|romeo & juliet|romeo juliet","Macbeth:200","Othello:60","King Lear:50|lear","A Midsummer Night's Dream:50|midsummer nights dream|midsummer night's dream","The Tempest:40|tempest","Much Ado About Nothing:15","Twelfth Night:10","Julius Caesar:10","The Merchant of Venice:8|merchant of venice","As You Like It:5","Richard III:4|richard 3","Coriolanus:1","Titus Andronicus:1","Cymbeline:1","Timon of Athens:1"] },
- { id:"pasta", cat:"Food", text:"Name a pasta shape", a:["Spaghetti:260","Penne:150","Lasagne:90|lasagna","Fusilli:80","Macaroni:80","Farfalle:60|bow tie|bowtie","Fettuccine:60","Linguine:50","Tagliatelle:40","Rigatoni:30","Ravioli:30","Tortellini:25","Orzo:15","Gnocchi:10","Pappardelle:8","Bucatini:8","Orecchiette:6","Cavatappi:2","Paccheri:1","Strozzapreti:1","Trofie:1"] },
- { id:"oly", cat:"Sport", text:"Name an Olympic sport", a:["Swimming:160","Athletics:140|track and field|running|track","Gymnastics:110","Basketball:70","Football:60|soccer","Tennis:50","Cycling:50","Boxing:40","Rowing:30","Archery:30","Fencing:25","Skiing:25","Weightlifting:20","Diving:20","Wrestling:20","Volleyball:18","Judo:15","Skateboarding:15","Curling:12","Golf:12","Surfing:12","Table Tennis:12|ping pong","Badminton:10","Hockey:10","Water Polo:8","Rugby:8","Sport Climbing:6|climbing","Taekwondo:6","Triathlon:6","Equestrian:6","Biathlon:4","Skeleton:3","Trampoline:2","Breaking:2|breakdancing"] }
+ { id:"speaker", cat:"Elevate", text:"Name any speaker who spoke in Elevate before", a:[
+   "Kuya Earl:2|earl","Kuya Cart:2|cart","Kuya Raf:2|raf",
+   "Kuya Karl:3|karl","Kuya Yves:3|yves","Kuya Drich:3|drich",
+   "Kuya Khing:4|khing","Kuya Nico Tiu:4|nico tiu|nico","Kuya Kyle:4|kyle",
+   "Kuya Ken:5|ken","Tito Dondi:5|dondi","Kuya Mark:5|mark"] },
+ { id:"exalt", cat:"Exalt", text:"Name one member from the Exalt ministry", a:[
+   "Kuya Khing:2|khing","Kuya Yves:2|yves","Kuya Shiji:2|shiji","Kuya Raf:2|raf",
+   "Deborah:3|deb","Kuya Nico:3|nico","Kuya Rhoyd:3|rhoyd",
+   "John:4","Tan2:4|tan|tan 2",
+   "Carla:5","Kuya Duke:5|duke"] },
+ /* Bible characters: tiers are my estimate of how often youth leaders preach them. Edit freely. */
+ { id:"bible", cat:"Bible", text:"Name a Bible character youth leaders preach about", a:[
+   "Jesus:1|jesus christ","David:1","Joseph:1","Daniel:1","Moses:1",
+   "Paul:2|apostle paul","Peter:2|simon peter","Esther:2","Timothy:2","Joshua:2","Abraham:2|abram","Solomon:2","Noah:2","Samson:2",
+   "Ruth:3","Nehemiah:3","Samuel:3","Gideon:3","Jonah:3","Elijah:3","Job:3","Isaiah:3","John:3|apostle john",
+   "Jeremiah:4","Mary:4|virgin mary","Caleb:4","Hannah:4","Barnabas:4","Deborah:4","Stephen:4","Elisha:4","Mordecai:4","Naomi:4","Thomas:4|doubting thomas","Zacchaeus:4","Martha:4","Matthew:4","Rahab:4","Nicodemus:4","Lazarus:4","Mary Magdalene:4","Lydia:4",
+   "Jabez:5","Josiah:5","Epaphras:5","Dorcas:5|tabitha","Mephibosheth:5","Ehud:5","Silas:5","Priscilla:5|aquila","Jehoshaphat:5","Onesimus:5","Obed-Edom:5|obededom","Uzziah:5"] },
+ /* Only these three Elevate Exalt songs are confirmed (2022 EP "Reliably True"). Tiers are placeholders: send me the full list and real tiers. */
+ { id:"song", cat:"Worship", text:"Name an Elevate Exalt song", a:[
+   "Reliably True:1","All Glorious:2","Land of the Living:3"] },
+ { id:"bring", cat:"Conference", text:"Name something you'd bring to a three-day conference", a:[
+   "Notebook:1|journal","Pen:1|ballpen|ballpoint","Bible:1","Water Bottle:1|tumbler|water","Powerbank:1|power bank|charger|phone charger","Jacket:1|hoodie",
+   "Snacks:2|food","Towel:2","Extra Clothes:2|clothes|change of clothes","Toiletries:2|toothbrush","Umbrella:2","ID:2|lanyard id|valid id","Phone:2|cellphone|mobile phone",
+   "Earphones:3|headphones|earbuds","Medicine:3|meds|vitamins","Face Mask:3|mask","Tissue:3|wet wipes|wipes","Cash:3|money|pera","Sunscreen:3","Pillow:3","Camera:3","Wallet:3",
+   "Handheld Fan:4|fan|pamaypay","Slippers:4|flip flops|tsinelas","Blanket:4","Alcohol:4|sanitizer|hand sanitizer","Laptop:4","Sticky Notes:4","Highlighters:4|highlighter",
+   "Banig:5|sleeping mat","Candle:5|candles","Whistle:5","Folding Chair:5|chair","3-in-1 Coffee:5|instant coffee|coffee","Ear Plugs:5|earplugs","Sleeping Bag:5","Mosquito Repellent:5|off lotion|insect repellent","Cup Noodles:5|noodles|instant noodles","Flashlight:5|torch"] }
 ];
 
 /* ---------- helpers ------------------------------------------------ */
+const TIERS = ["Common", "Elevate Go-er", "Servant", "Ministry Head", "Youth Coordinator"];
+const TIER_PTS = [20, 40, 60, 80, 100];
 const $ = s => document.querySelector(s);
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
-const norm = s => String(s).toLowerCase().normalize("NFKD").replace(/[̀-ͯ]/g, "").replace(/&/g, "and").replace(/[^a-z0-9]+/g, "");
+const HONOR = /^(kuya|tito|tita|ate|bro|sis)(?=.{2})/;
+const norm = s => String(s).toLowerCase().normalize("NFKD").replace(/[̀-ͯ]/g, "").replace(/&/g, "and").replace(/[^a-z0-9]+/g, "").replace(HONOR, "");
 const CHEV = '<svg class="chev" viewBox="0 0 100 100" aria-hidden="true"><path d="M0 100 L36 0 L64 0 L100 100 L74 100 L50 28 L26 100Z"/></svg>';
 
 function parseQ(q) {
   return { ...q, items: q.a.map(s => {
     const [head, ...al] = s.split("|"); const i = head.lastIndexOf(":");
-    const name = head.slice(0, i), w = +head.slice(i + 1);
-    return { name, w, keys: [name, ...al].map(norm) };
+    const name = head.slice(0, i), tier = +head.slice(i + 1) - 1;
+    return { name, tier, keys: [name, ...al].map(norm) };
   }) };
 }
 function lev(a, b) {
@@ -187,9 +201,10 @@ function matchAnswer(q, raw) {
   const k = norm(raw); if (!k) return null;
   for (const it of q.items) if (it.keys.includes(k)) return it;
   if (k.length >= 5) {
-    const tol = k.length >= 9 ? 2 : 1; let best = null, bd = 9;
-    for (const it of q.items) for (const key of it.keys) { const d = lev(k, key); if (d < bd) { bd = d; best = it; } }
-    if (bd <= tol) return best;
+    const tol = k.length >= 9 ? 2 : 1; let best = null, bd = 9, tie = false;
+    for (const it of q.items) for (const key of it.keys) { const d = lev(k, key);
+      if (d < bd) { bd = d; best = it; tie = false; } else if (d === bd && it !== best) tie = true; }
+    if (bd <= tol && !tie) return best;
   }
   return null;
 }
@@ -199,56 +214,44 @@ const EPOCH = Date.UTC(2026, 10, 18);
 const now = new Date();
 const dayN = Math.floor((Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()) - EPOCH) / 864e5);
 const DATE = now.toISOString().slice(0, 10);
+const DAYKEY = DATE + ":v2";   // bump when the question set changes so old saves are ignored
 const PUZZLE = Math.max(1, dayN + 1);
+const PER_DAY = 5;
 function rng(seed) { return () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
 function todaysQuestions() {
-  const n = Math.max(0, dayN), per = 4, cycleLen = Math.ceil(BANK.length / per);
+  if (BANK.length <= PER_DAY) return BANK.map(parseQ);
+  const n = Math.max(0, dayN), cycleLen = Math.ceil(BANK.length / PER_DAY);
   const r = rng(1000 + Math.floor(n / cycleLen)); const idx = BANK.map((_, i) => i);
   for (let i = idx.length - 1; i > 0; i--) { const j = Math.floor(r() * (i + 1)); [idx[i], idx[j]] = [idx[j], idx[i]]; }
   const pos = n % cycleLen; const pick = [];
-  for (let k = 0; k < per; k++) pick.push(idx[(pos * per + k) % idx.length]);
-  return [ELEVATE, ...pick.map(i => BANK[i])].map(parseQ);
+  for (let k = 0; k < PER_DAY; k++) pick.push(idx[(pos * PER_DAY + k) % idx.length]);
+  return pick.map(i => parseQ(BANK[i]));
 }
 const QS = todaysQuestions();
+const QIDS = new Set(QS.map(q => q.id));
 
 /* ---------- state -------------------------------------------------- */
-const LIVE_W = 10;
 let live = {};          // qid -> { name: players }
-let liveScores = [];    // totals of finished players today
+let liveN = {};         // qid -> players who answered
+let liveScores = [];
 let livePlayers = 0;
 let dbState = "connecting"; // connecting | live | offline
-let state = { answers: [] };  // [{q, a, pct, pts}]
+let state = { answers: [] };  // [{q, a, tier, pts, pct}]
 let stage = "intro";     // intro | ask | reveal | done
 let uid = null, db = null, toast = "";
 
-const LS = "elevate-rarest:" + DATE;
+const LS = "elevate-rarest:" + DAYKEY;
 const lsGet = () => { try { return JSON.parse(localStorage.getItem(LS)); } catch { return null; } };
 const lsSet = v => { try { localStorage.setItem(LS, JSON.stringify(v)); } catch {} };
 const saved = lsGet(); if (saved && Array.isArray(saved.answers)) state = saved;
 
-function dist(q) {
-  const lv = live[q.id] || {};
-  const rows = q.items.map(it => ({ name: it.name, w: it.w + LIVE_W * (lv[it.name] || 0) }));
-  const total = rows.reduce((s, r) => s + r.w, 0);
-  rows.forEach(r => r.pct = r.w / total * 100);
-  return rows.sort((a, b) => b.pct - a.pct);
-}
-const ptsFor = pct => Math.round(100 * (1 - Math.sqrt(pct / 100)));
 const total = () => state.answers.reduce((s, a) => s + a.pts, 0);
-/* Five rarities, most common first. `max` = share of players (%) below which an answer sits in that tier. */
-const RARITIES = [
-  { name: "Common",       max: Infinity }, // 20%+
-  { name: "Elevate Go-er", max: 20 },      // 8-20%
-  { name: "Servant",    max: 8 },        // 3-8%
-  { name: "Ministry Head",    max: 3 },        // 1-3%
-  { name: "Youth Coordinator",      max: 1 }         // under 1%
-];
-const rarityIdx = pct => pct < 1 ? 4 : pct < 3 ? 3 : pct < 8 ? 2 : pct < 20 ? 1 : 0;
-const label = pct => RARITIES[rarityIdx(pct)].name;
-const pips = pct => `<span class="pips" aria-hidden="true">${[0,1,2,3,4].map(i => `<i class="${i <= rarityIdx(pct) ? "on" : ""}"></i>`).join("")}</span>`;
+const label = t => TIERS[t];
+const pips = t => `<span class="pips" aria-hidden="true">${[0,1,2,3,4].map(i => `<i class="${i <= t ? "on" : ""}"></i>`).join("")}</span>`;
 const tierOf = t => t >= 450 ? "Rooftop" : t >= 400 ? "Top Floor" : t >= 330 ? "Sky Lobby" : t >= 250 ? "Mid-Rise" : t >= 150 ? "Mezzanine" : "Lobby";
+const share = (qid, name) => (liveN[qid] || 0) >= 5 ? Math.round(((live[qid] || {})[name] || 0) / liveN[qid] * 100) : null;
 
-/* ---------- live data (shared rarity) ------------------------------ */
+/* ---------- live data (shared stats) ------------------------------- */
 let writeChain = Promise.resolve();
 function persist() {
   lsSet(state);
@@ -258,24 +261,24 @@ function persist() {
     try {
       const ref = db.collection("plays").doc(uid);
       const snap = await ref.get(); const cur = snap.exists ? (snap.data().days || {}) : {};
-      cur[DATE] = body;
+      cur[DAYKEY] = body;
       const keep = Object.keys(cur).sort().slice(-60); const days = {}; keep.forEach(k => days[k] = cur[k]);
       await ref.set({ days });
     } catch (e) { /* the game keeps working locally */ }
   });
 }
 function ingest(snap) {
-  const l = {}; const sc = []; let players = 0;
+  const l = {}, n = {}; const sc = []; let players = 0;
   snap.docs.forEach(d => {
-    const day = d.data()?.days?.[DATE]; if (!day || !Array.isArray(day.answers)) return;
+    const day = d.data()?.days?.[DAYKEY]; if (!day || !Array.isArray(day.answers)) return;
     players++;
-    day.answers.forEach(a => { (l[a.q] = l[a.q] || {}); l[a.q][a.a] = (l[a.q][a.a] || 0) + 1; });
+    day.answers.forEach(a => { if (!QIDS.has(a.q)) return; (l[a.q] = l[a.q] || {}); l[a.q][a.a] = (l[a.q][a.a] || 0) + 1; n[a.q] = (n[a.q] || 0) + 1; });
     if (day.done) sc.push(day.total);
     if (d.id === uid && day.answers.length > state.answers.length) { state = { answers: day.answers }; lsSet(state); }
   });
-  live = l; liveScores = sc; livePlayers = players; dbState = "live";
+  live = l; liveN = n; liveScores = sc; livePlayers = players; dbState = "live";
   if (stage === "intro" && state.answers.length >= QS.length) stage = "done";
-  render();
+  if (stage !== "ask") render(); else renderMeta();
 }
 async function connect() {
   let timer = setTimeout(() => { if (dbState === "connecting") { dbState = "offline"; renderMeta(); } }, 10000);
@@ -294,7 +297,7 @@ function renderMeta() {
   $("#meta").innerHTML = `Daily <b>No. ${PUZZLE}</b><br>${esc(DATE)} · ${esc(s)}`;
 }
 function floors(cur, revealed) {
-  return `<div class="floors" role="img" aria-label="Question ${cur + 1} of ${QS.length}">` + QS.map((_, i) =>
+  return `<div class="floors" style="grid-template-columns:repeat(${QS.length},1fr)" role="img" aria-label="Question ${cur + 1} of ${QS.length}">` + QS.map((_, i) =>
     `<div class="floor ${i < cur || (i === cur && revealed) ? "done" : i === cur ? "here" : ""}"><span>${i + 1}</span></div>`).join("") + "</div>";
 }
 function untilReset() {
@@ -314,10 +317,10 @@ function render() {
         <p class="eyebrow">Daily No. ${PUZZLE}</p>
         <h2 class="wm xl" aria-label="Rarest">R${CHEV}REST</h2>
       </div>
-      <p class="lead">Five questions. Pick the answer almost nobody else picks. The rarer your answer, the higher you ride.</p>
+      <p class="lead">${QS.length} questions about Elevate and CCF. Pick the answer almost nobody else thinks of. The rarer the answer, the higher you ride.</p>
       <ol class="how">
         <li><b>01</b><span>Type any answer. If it is not on the board, it does not count and you can try again.</span></li>
-        <li><b>02</b><span>Your answer scores by how few players chose it. A 1% answer beats a 30% one.</span></li>
+        <li><b>02</b><span>Every answer sits in one of five tiers, from Common up to Youth Coordinator. Higher tier, more points.</span></li>
         <li><b>03</b><span>One run per day. Questions change at 00:00 UTC.</span></li>
       </ol>
       <button class="btn" id="go"><span>${started ? "Resume run" : "Take the lift"}</span></button></div>`;
@@ -342,31 +345,30 @@ function askView(msg = "", val = "") {
     e.preventDefault();
     const hit = matchAnswer(q, inp.value);
     if (!hit) { $("#note").textContent = "That one is not on the board. Try another answer."; return; }
-    const row = dist(q).find(r => r.name === hit.name);
-    state.answers.push({ q: q.id, a: hit.name, pct: +row.pct.toFixed(2), pts: ptsFor(row.pct) });
+    state.answers.push({ q: q.id, a: hit.name, tier: hit.tier, pts: TIER_PTS[hit.tier] });
     persist(); stage = "reveal"; render();
   };
 }
 
 function revealView() {
-  const i = state.answers.length - 1, q = QS[i], a = state.answers[i], d = dist(q);
-  const top = d.slice(0, 6), inTop = top.some(r => r.name === a.a), max = top[0].pct;
-  const li = r => `<li class="${r.name === a.a ? "me" : ""}"><span class="nm">${esc(r.name)}</span><span class="pc">${r.pct.toFixed(1)}%</span><div class="track"><div class="fill" style="width:${Math.max(1.5, r.pct / max * 100)}%"></div></div></li>`;
-  const mine = d.find(r => r.name === a.a);
-  const oneIn = a.pct > 0 ? Math.round(100 / a.pct) : 0;
+  const i = state.answers.length - 1, q = QS[i], a = state.answers[i];
+  const counts = TIERS.map((_, t) => q.items.filter(it => it.tier === t).length);
+  const row = t => `<li class="${t === a.tier ? "me" : ""}"><span class="nm">${TIERS[t]}</span><span class="pc">${counts[t]} answer${counts[t] === 1 ? "" : "s"}</span><div class="track"><div class="fill" style="width:${(t + 1) * 20}%"></div></div></li>`;
+  const sh = share(q.id, a.a);
   const last = i === QS.length - 1;
   $("#app").innerHTML = `<div class="reveal">
     ${floors(i, true)}
     <p class="eyebrow">${esc(q.text)}</p>
-    <div class="verdict"><div><span class="tag">${label(a.pct)}</span>${pips(a.pct)}<div class="you">${esc(a.a)}</div></div><div class="pts">+${a.pts} pts · 1 in ${oneIn}</div></div>
-    <ul class="bars" aria-label="How players answered">${top.map(li).join("")}${inTop ? "" : `<li class="gap" style="display:block">···</li>` + li(mine)}</ul>
+    <div class="verdict"><div><span class="tag">${label(a.tier)}</span>${pips(a.tier)}<div class="you">${esc(a.a)}</div></div><div class="pts">+${a.pts} pts</div></div>
+    <ul class="bars" aria-label="Rarity tiers">${[4,3,2,1,0].map(row).join("")}</ul>
+    ${sh !== null ? `<p class="hint">${sh}% of players picked ${esc(a.a)}.</p>` : ""}
     <button class="btn" id="nx"><span>${last ? "Reach the roof" : "Next floor"}</span></button></div>`;
   $("#nx").onclick = () => { stage = last ? "done" : "ask"; render(); $("#app").scrollIntoView({ block: "start" }); };
   $("#nx").focus();
 }
 
 function shareText() {
-  const sq = state.answers.map(a => ["⬛", "⬜", "🟨", "🟧", "🟥"][rarityIdx(a.pct)]).join("");
+  const sq = state.answers.map(a => ["⬛", "⬜", "🟨", "🟧", "🟥"][a.tier]).join("");
   return `ELEVATE RAREST No. ${PUZZLE}\n${total()}/${QS.length * 100} · ${tierOf(total())}\n${sq}`;
 }
 function doneView() {
@@ -376,9 +378,9 @@ function doneView() {
     <div class="score"><p class="eyebrow">Daily No. ${PUZZLE} · you reached</p>
       <div class="tier">${tierOf(t)}</div>
       <div class="big">${t}<small>/${QS.length * 100}</small></div>
-      ${beat !== null ? `<p class="hint">Rarer than ${beat}% of today's ${liveScores.length} finishers.</p>` : ""}</div>
+      ${beat !== null ? `<p class="hint">Higher than ${beat}% of today's ${liveScores.length} finishers.</p>` : ""}</div>
     <div class="blocks" aria-hidden="true">${state.answers.map(a => `<i style="--o:${(0.3 + a.pts / 100 * 0.7).toFixed(2)}"></i>`).join("")}</div>
-    <div class="rows">${state.answers.map((a, i) => `<div class="row"><span class="n">${i + 1}</span><span class="qq">${esc(QS[i].text)}</span><span class="aa">${esc(a.a)} <span class="tag" style="font-size:10px;vertical-align:middle">${label(a.pct)}</span></span><span class="pp"><b>${a.pts}</b>${a.pct.toFixed(1)}%</span></div>`).join("")}</div>
+    <div class="rows">${state.answers.map((a, i) => `<div class="row"><span class="n">${i + 1}</span><span class="qq">${esc(QS[i].text)}</span><span class="aa">${esc(a.a)} <span class="tag" style="font-size:10px;vertical-align:middle">${label(a.tier)}</span></span><span class="pp"><b>${a.pts}</b>pts</span></div>`).join("")}</div>
     <div class="actions"><button class="btn" id="sh"><span>Copy result</span></button><span class="clock">Next run in <b id="clk">${untilReset()}</b></span></div>
     <p class="toast" id="toast" role="status">${esc(toast)}</p></div>`;
   $("#sh").onclick = async () => {
