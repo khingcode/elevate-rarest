@@ -682,13 +682,19 @@ function paintOwner() { $("#owner").hidden = !(isOwner || hashOwner()); }
 addEventListener("hashchange", paintOwner); paintOwner();
 $("#replay").onclick = () => { Sfx.tap(); replay(); };
 /* background music: starts on the first tap (browsers block audio before that), quiet by default */
-const bgm = $("#bgm"), musBtn = $("#mus"), MUSIC_VOL = 0.14;
+const bgm = $("#bgm"), musBtn = $("#mus"), MUSIC_VOL = 0.4;
 let musicMuted = false, musicOK = true, musicStarted = false;
 try { musicMuted = localStorage.getItem("elevate-rarest:music-muted") === "1"; } catch {}
 bgm.volume = MUSIC_VOL;
 function paintMus() { musBtn.textContent = musicMuted ? "Music off" : "Music on"; musBtn.setAttribute("aria-pressed", String(!musicMuted)); }
 function playMusic() { if (musicMuted || !musicOK) return; const p = bgm.play(); if (p && p.catch) p.catch(() => {}); }
-bgm.addEventListener("error", () => { musicOK = false; musBtn.hidden = true; });
+let triedBlob = false;
+bgm.addEventListener("error", async () => {
+  /* some viewers refuse direct media files; retry once through fetch + a blob URL */
+  if (!triedBlob) { triedBlob = true;
+    try { const r = await fetch("music.mp3"); if (r.ok) { bgm.src = URL.createObjectURL(await r.blob()); if (musicStarted) playMusic(); return; } } catch {} }
+  musicOK = false; musBtn.hidden = true;
+});
 bgm.addEventListener("canplay", () => { musBtn.hidden = false; }, { once: true });
 musBtn.hidden = false; paintMus();
 musBtn.onclick = () => {
