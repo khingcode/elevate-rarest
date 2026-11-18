@@ -292,7 +292,22 @@ const BANK = [
    "David:1","Moses:1","Jesus:1|the good shepherd|good shepherd|jesus christ",
    "Abel:2","Jacob:2","The Nativity Shepherds:2|shepherds|christmas shepherds|the shepherds|shepherds at bethlehem","Abraham:2",
    "Amos:3","Joseph:3","Rachel:3","Isaac:3",
-   "Jethro:4","Laban:4","Jabal:4","Nabal:4"] }
+   "Jethro:4","Laban:4","Jabal:4","Nabal:4"] },
+ { id:"king", cat:"Bible", text:"Name a Bible character who was a king", a:[
+   "David:1","Solomon:1","Saul:1","Jesus:1|jesus christ|king of kings",
+   "Nebuchadnezzar:2|nebuchadnezzer","Hezekiah:2","Herod:2|king herod","Ahab:2","Pharaoh:2","Josiah:2",
+   "Jehoshaphat:3","Jeroboam:3","Rehoboam:3","Belshazzar:3","Cyrus:3|king cyrus","Ahasuerus:3|xerxes","Darius:3","Asa:3","Manasseh:3","Uzziah:3|azariah","Melchizedek:3","Jehu:3","Joash:3","Zedekiah:3","Jehoiakim:3","Agrippa:3","Hiram:3",
+   "Omri:4","Baasha:4","Nadab:4","Elah:4","Zimri:4","Jotham:4","Ahaz:4","Amon:4","Jehoahaz:4","Jehoiachin:4","Amaziah:4","Ish-Bosheth:4|ishbosheth","Abimelech:4","Og:4|king og","Sihon:4","Eglon:4","Sennacherib:4","Agag:4","Balak:4","Nahash:4","Tiglath-Pileser:4|tiglath pileser"] },
+ { id:"animal", cat:"Bible", text:"Name an animal in the Bible", a:[
+   "Lamb:1|sheep","Lion:1","Serpent:1|snake","Donkey:1|ass","Dove:1",
+   "Fish:2|whale|big fish|great fish","Camel:2","Goat:2","Ox:2|bull|cattle|cow","Raven:2","Horse:2","Eagle:2","Wolf:2","Ram:2","Bear:2","Sparrow:2","Locust:2|locusts","Fox:2|foxes","Calf:2|golden calf",
+   "Leopard:3","Quail:3","Frog:3|frogs","Ant:3","Bee:3|bees","Scorpion:3","Dog:3","Pig:3|swine","Deer:3|hart","Hawk:3","Gnat:3|lice","Stork:3","Vulture:3","Dragon:3","Lamb of God:3",
+   "Leviathan:4","Behemoth:4","Ostrich:4","Badger:4","Hare:4|rabbit","Jackal:4","Rock Badger:4|coney","Pelican:4","Hoopoe:4","Cormorant:4","Porcupine:4","Unicorn:4","Gazelle:4|roe","Mule:4","Lizard:4","Grasshopper:4|cricket","Moth:4","Spider:4","Wild Ox:4"] },
+ { id:"food", cat:"Bible", text:"Name a food mentioned in the Bible", a:[
+   "Bread:1","Fish:1","Wine:1","Manna:1",
+   "Figs:2|fig","Grapes:2|grape","Olives:2|olive","Honey:2","Lentil Stew:2|lentils|stew|red stew","Quail:2","Milk:2","Barley Loaves:2|barley","Pomegranate:2|pomegranates","Dates:2","Passover Lamb:2|lamb|roast lamb",
+   "Wheat:3|grain","Locusts:3|locust","Almonds:3|almond","Cucumbers:3|cucumber","Melons:3|melon","Leeks:3|leek","Garlic:3","Onions:3|onion","Cheese:3","Butter:3","Raisin Cakes:3|raisins","Eggs:3|egg","Salt:3","Vinegar:3","Unleavened Bread:3|matzah","Apple:3|apples",
+   "Cumin:4","Dill:4|anise","Mint:4","Coriander:4","Spelt:4","Millet:4","Carob Pods:4|husks|carob","Roasted Grain:4|parched grain","Curds:4","Pistachios:4|pistachio","Mandrakes:4|mandrake","Hyssop:4"] }
 ];
 
 /* ---------- sound (Web Audio, no files; starts only after a click) ---- */
@@ -350,7 +365,7 @@ function parseQ(q) {
     const [head, ...al] = s.split("|"); const i = head.lastIndexOf(":");
     const name = head.slice(0, i), tier = +head.slice(i + 1) - 1;
     const nb = name.match(/^([123]) (.+)/); const ord = nb ? [["", "first", "second", "third"], ["", "1st", "2nd", "3rd"]].map(o => o[nb[1]] + " " + nb[2]) : [];
-    return { name, tier, keys: [name, ...al, ...ord].map(norm) };
+    return { name, tier, keys: [name, ...al, ...ord, ...(q.id === "king" ? ["king " + name] : [])].map(norm) };
   }) };
 }
 function lev(a, b) {
@@ -378,7 +393,7 @@ const EPOCH = Date.UTC(2026, 10, 18);
 const now = new Date();
 const dayN = Math.floor((Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()) - EPOCH) / 864e5);
 const DATE = now.toISOString().slice(0, 10);
-const DAYKEY = DATE + ":v7";   // bump when the question set changes so old saves are ignored
+const DAYKEY = DATE + ":v8";   // bump when the question set changes so old saves are ignored
 const PUZZLE = Math.max(1, dayN + 1);
 const PER_DAY = 5;
 function rng(seed) { return () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
