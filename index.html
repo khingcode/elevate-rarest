@@ -580,6 +580,62 @@ function shareText() {
   const sq = state.answers.map(a => ["⬜", "🟨", "🟧", "🟥"][a.tier]).join("");
   return `ELEVATE RAREST No. ${PUZZLE}\n${total()}/${QS.length * 100} · ${rankOf(total())} · ${fmt(state.ms)}\n${sq}`;
 }
+/* ---------- result image (canvas -> PNG) --------------------------- */
+async function makeCard() {
+  try { await Promise.all([document.fonts.load('italic 900 60px Archivo'), document.fonts.load('700 30px "JetBrains Mono"')]); } catch {}
+  const W = 1080, H = 1480, c = document.createElement("canvas"); c.width = W; c.height = H;
+  const x = c.getContext("2d"), ORANGE = "#ef4b2b", DISP = 'italic 900 {S}px Archivo, "Arial Black", sans-serif', MONO = '700 {S}px "JetBrains Mono", monospace';
+  const font = (tpl, size, stretch) => { x.font = tpl.replace("{S}", size); try { x.fontStretch = stretch || "normal"; } catch {} };
+  const t = total(), idx = rankIdx(t);
+  x.fillStyle = "#000"; x.fillRect(0, 0, W, H);
+  x.fillStyle = "rgba(255,255,255,.06)"; for (let y = 160; y < H; y += 160) x.fillRect(0, y, W, 2);
+  const chev = (cx, cy, w, h, a) => { x.save(); x.globalAlpha = a; x.fillStyle = ORANGE; x.beginPath(); x.moveTo(cx, cy + h * .75); x.lineTo(cx + w / 2, cy + h * .3); x.lineTo(cx + w, cy + h * .75); x.lineTo(cx + w, cy + h * .9); x.lineTo(cx + w / 2, cy + h * .45); x.lineTo(cx, cy + h * .9); x.closePath(); x.fill(); x.restore(); };
+  for (let y = 0; y < H; y += 80) { chev(28, y, 28, 80, .35); chev(W - 56, y, 28, 80, .35); }
+  // wordmark
+  let px = 80; const wy = 140; font(DISP, 76, "expanded"); x.fillStyle = "#fff";
+  for (const part of ["ELEV", null, "TE"]) {
+    if (part) { x.fillText(part, px, wy); px += x.measureText(part).width + 2; }
+    else { const w = 62, h = 76; x.save(); x.translate(px, wy - h + 6); x.transform(1, 0, -.16, 1, 0, 0); x.fillStyle = ORANGE; x.beginPath(); x.moveTo(0, h); x.lineTo(w * .36, 0); x.lineTo(w * .64, 0); x.lineTo(w, h); x.lineTo(w * .74, h); x.lineTo(w * .5, h * .28); x.lineTo(w * .26, h); x.closePath(); x.fill(); x.restore(); px += w + 4; }
+  }
+  font(MONO, 26); x.fillStyle = "#9b9b9b"; x.textAlign = "right"; x.fillText("DAILY NO. " + PUZZLE, W - 80, 96); x.fillText(DATE, W - 80, 134); x.textAlign = "left";
+  x.fillStyle = "#fff"; x.fillRect(80, 176, W - 160, 4);
+  // rank
+  font(MONO, 26); x.fillStyle = ORANGE; x.fillText("YOUR RANK", 80, 250);
+  let size = 96; const rank = rankOf(t).toUpperCase(); font(DISP, size, "expanded"); while (x.measureText(rank).width > W - 160 && size > 40) { size -= 4; font(DISP, size, "expanded"); }
+  x.fillStyle = ORANGE; x.fillText(rank, 80, 250 + size + 14);
+  // score
+  font(DISP, 270, "expanded"); x.fillStyle = "#fff"; x.fillText(String(t), 76, 640); const sw = x.measureText(String(t)).width;
+  font(DISP, 84, "expanded"); x.fillStyle = "#9b9b9b"; x.fillText("/" + maxScore(), 76 + sw + 16, 640);
+  font(MONO, 28); x.fillStyle = "#9b9b9b"; x.fillText("YOUR TIME", 80, 712); x.fillStyle = ORANGE; font(MONO, 44); x.fillText(fmt(state.ms), 272, 714);
+  // rank ladder pips
+  const bw = (W - 160 - 3 * 14) / 4; for (let i = 0; i < 4; i++) { x.save(); x.translate(80 + i * (bw + 14), 750); x.transform(1, 0, -.16, 1, 0, 0); x.fillStyle = i <= idx ? ORANGE : "#1d1d1d"; x.fillRect(0, 0, bw, 22); x.restore(); }
+  // answers
+  const row0 = 840, rh = 104;
+  state.answers.forEach((a, i) => {
+    const y = row0 + i * rh; x.fillStyle = "#2a2a2a"; x.fillRect(80, y, W - 160, 2);
+    font('500 {S}px Archivo, sans-serif', 24); x.fillStyle = "#9b9b9b";
+    let q = QS[i].text; while (x.measureText(q).width > 620 && q.length > 8) q = q.slice(0, -2); if (q !== QS[i].text) q = q.trimEnd() + "…"; x.fillText(q, 80, y + 36);
+    font('800 {S}px Archivo, sans-serif', 38); x.fillStyle = "#fff"; let an = a.a; while (x.measureText(an).width > 560 && an.length > 6) an = an.slice(0, -2); if (an !== a.a) an = an.trimEnd() + "…"; x.fillText(an, 80, y + 82);
+    const tn = TIERS[a.tier].toUpperCase(); font(MONO, 22); const tw = x.measureText(tn).width + 24, tx = 80 + Math.max(x.measureText(an).width, 0) ;
+    font(MONO, 22); x.fillStyle = "#9b9b9b"; x.textAlign = "right"; x.fillText(tn, W - 240, y + 82); x.textAlign = "left";
+    font(MONO, 44); x.fillStyle = a.tier === 3 ? ORANGE : "#fff"; x.textAlign = "right"; x.fillText(String(a.pts), W - 80, y + 70); x.textAlign = "left";
+  });
+  font(MONO, 22); x.fillStyle = "#6f6f6f"; x.fillText("ELEVATE RAREST · PICK THE ANSWER NOBODY ELSE DOES", 80, H - 56);
+  return new Promise(res => c.toBlob(b => res(b), "image/png"));
+}
+async function saveImage() {
+  const note = $("#toast"); note.textContent = "Making your image…";
+  let blob; try { blob = await makeCard(); } catch { blob = null; }
+  if (!blob) { note.textContent = "Could not make the image in this browser. Use Copy text instead."; return; }
+  const name = `elevate-rarest-${PUZZLE}.png`;
+  try { const dl = await claude.use("downloads"); if (dl) { await dl.save({ filename: name, data: blob }); note.textContent = "Saved. Check your downloads."; Sfx.blip(); return; } }
+  catch (e) { if (e && e.code === "declined") { note.textContent = "Save cancelled."; return; } }
+  try { const f = new File([blob], name, { type: "image/png" }); if (navigator.canShare && navigator.canShare({ files: [f] })) { await navigator.share({ files: [f] }); note.textContent = "Shared."; return; } }
+  catch (e) { if (e && e.name === "AbortError") { note.textContent = ""; return; } }
+  const url = URL.createObjectURL(blob);
+  try { const a = document.createElement("a"); a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove(); note.textContent = "Saved. Check your downloads."; Sfx.blip(); } catch {}
+  $("#preview").innerHTML = `<p class="hint">If nothing downloaded, press and hold the image to save it.</p><img src="${url}" alt="Your Elevate Rarest result" style="width:100%;max-width:420px;display:block;margin-top:8px">`;
+}
 function doneView() {
   const t = total(), beat = liveScores.length > 1 ? Math.round(liveScores.filter(s => s < t).length / liveScores.length * 100) : null;
   $("#app").innerHTML = `<div class="res" style="display:flex;flex-direction:column;gap:24px">
@@ -593,8 +649,9 @@ function doneView() {
     <ul class="ladder" aria-label="Score ranks">${TIERS.map((n, i) => i).reverse().map(i => `<li class="${i === rankIdx(t) ? "here" : i < rankIdx(t) ? "passed" : ""}"><span class="ln">${TIERS[i]}</span><span class="lr">${bandRange(i)} pts${i === rankIdx(t) ? " · you" : ""}</span></li>`).join("")}</ul>
     <div class="blocks" aria-hidden="true">${state.answers.map(a => `<i style="--o:${(0.3 + a.pts / 100 * 0.7).toFixed(2)}"></i>`).join("")}</div>
     <div class="rows">${state.answers.map((a, i) => `<div class="row"><span class="n">${i + 1}</span><span class="qq">${esc(QS[i].text)}</span><span class="aa">${esc(a.a)} <span class="tag" style="font-size:10px;vertical-align:middle">${label(a.tier)}</span></span><span class="pp"><b>${a.pts}</b>pts</span></div>`).join("")}</div>
-    <div class="actions"><button class="btn" id="sh"><span>Copy result</span></button><span class="clock">Next run in <b id="clk">${untilReset()}</b></span></div>
-    <p class="toast" id="toast" role="status">${esc(toast)}</p></div>`;
+    <div class="actions"><button class="btn" id="sv"><span>Save image</span></button><button class="btn ghost" id="sh"><span>Copy text</span></button><span class="clock">Next run in <b id="clk">${untilReset()}</b></span></div>
+    <p class="toast" id="toast" role="status">${esc(toast)}</p><div id="preview"></div></div>`;
+  $("#sv").onclick = saveImage;
   $("#sh").onclick = async () => {
     const txt = shareText();
     try { await navigator.clipboard.writeText(txt); toast = "Copied. Paste it anywhere."; Sfx.blip(); }
