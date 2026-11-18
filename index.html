@@ -63,6 +63,10 @@ header.top { display: flex; justify-content: space-between; align-items: center;
 .meta { font-family: var(--mono); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--dim); text-align: right; }
 .meta b { color: var(--fg); font-weight: 700; }
 
+.right { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
+.snd { appearance: none; background: transparent; border: 1px solid var(--line); color: var(--dim); font-family: var(--mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; padding: 4px 10px; cursor: pointer; }
+.snd:hover { color: var(--fg); border-color: var(--fg); }
+.snd[aria-pressed="false"] { color: #666; text-decoration: line-through; }
 .eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); margin: 0; }
 h2.q { font-family: var(--display); font-style: italic; font-weight: 900; font-stretch: 118%; text-transform: uppercase;
   font-size: clamp(30px, 8vw, 46px); line-height: .98; letter-spacing: -0.02em; margin: 0; text-wrap: balance; }
@@ -162,7 +166,7 @@ footer { color: #6f6f6f; font-size: 12px; border-top: 1px solid var(--line); pad
 <div class="shaft">
   <header class="top">
     <h1 class="wm sm" aria-label="Elevate">EL<span style="display:contents">E</span>V<svg class="chev" viewBox="0 0 100 100" aria-hidden="true"><path d="M0 100 L36 0 L64 0 L100 100 L74 100 L50 28 L26 100Z"/></svg>TE</h1>
-    <div class="meta" id="meta"></div>
+    <div class="right"><div class="meta" id="meta"></div><button class="snd" id="snd" type="button" aria-pressed="true">Sound on</button></div>
   </header>
   <main id="app" aria-live="polite"></main>
   <footer>Every answer has a fixed tier set by the Elevate team. The higher the tier, the more points it scores.</footer>
@@ -231,6 +235,47 @@ const BANK = [
    "Confession:3","Silence:3","Solitude:3","Sabbath:3|rest","Gratitude:3|thanksgiving","Evangelism:3|sharing the gospel","Accountability:3",
    "Simplicity:4","Submission:4","Celebration:4","Spiritual Direction:4|guidance","Lectio Divina:4","Stewardship:4"] },
 ];
+
+/* ---------- sound (Web Audio, no files; starts only after a click) ---- */
+const Sfx = (() => {
+  let ctx = null, muted = false;
+  try { muted = localStorage.getItem("elevate-rarest:muted") === "1"; } catch {}
+  const ac = () => {
+    if (!ctx) { try { ctx = new (window.AudioContext || window.webkitAudioContext)(); } catch { return null; } }
+    if (ctx.state === "suspended") ctx.resume().catch(() => {});
+    return ctx;
+  };
+  function tone(f, d = .15, o = {}) {
+    if (muted) return; const c = ac(); if (!c) return;
+    const t = c.currentTime + (o.at || 0), osc = c.createOscillator(), g = c.createGain();
+    osc.type = o.type || "sine"; osc.frequency.setValueAtTime(f, t);
+    if (o.to) osc.frequency.exponentialRampToValueAtTime(o.to, t + d);
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(o.vol || .12, t + .012); g.gain.exponentialRampToValueAtTime(0.0001, t + d);
+    osc.connect(g).connect(c.destination); osc.start(t); osc.stop(t + d + .05);
+  }
+  function sweep(d, from, to, vol) {
+    if (muted) return; const c = ac(); if (!c) return;
+    const t = c.currentTime, len = Math.max(1, Math.floor(c.sampleRate * d)), buf = c.createBuffer(1, len, c.sampleRate), data = buf.getChannelData(0);
+    for (let i = 0; i < len; i++) data[i] = Math.random() * 2 - 1;
+    const src = c.createBufferSource(); src.buffer = buf;
+    const f = c.createBiquadFilter(); f.type = "bandpass"; f.Q.value = 1.2; f.frequency.setValueAtTime(from, t); f.frequency.exponentialRampToValueAtTime(to, t + d);
+    const g = c.createGain(); g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(vol, t + d * .35); g.gain.exponentialRampToValueAtTime(0.0001, t + d);
+    src.connect(f).connect(g).connect(c.destination); src.start(t);
+  }
+  const NOTES = [523.25, 659.25, 783.99, 1046.5, 1318.5];
+  return {
+    muted: () => muted,
+    toggle() { muted = !muted; try { localStorage.setItem("elevate-rarest:muted", muted ? "1" : "0"); } catch {} if (!muted) this.tap(); return muted; },
+    tap() { tone(1500, .05, { type: "triangle", vol: .07 }); },
+    lock() { tone(440, .09, { type: "square", vol: .05 }); tone(660, .14, { type: "square", vol: .05, at: .08 }); },
+    bad() { tone(190, .22, { type: "sawtooth", vol: .06, to: 95 }); },
+    reveal(tier) { for (let i = 0; i <= tier + 1 && i < NOTES.length; i++) tone(NOTES[i], .28, { type: "triangle", vol: .1, at: i * .085 }); if (tier >= 3) tone(2093, .6, { vol: .05, at: .4 }); },
+    whoosh(d) { sweep(d / 1000, 180, 1400, .22); tone(70, d / 1000, { type: "sine", vol: .1, to: 140 }); },
+    ding() { tone(1318.5, 1.1, { vol: .13 }); tone(1975.5, .8, { vol: .05 }); },
+    fanfare() { [0, 2, 4, 3, 4].forEach((n, i) => tone(NOTES[n], i === 4 ? .8 : .18, { type: "triangle", vol: .11, at: i * .12 })); tone(2093, .9, { vol: .05, at: .6 }); },
+    blip() { tone(988, .07, { vol: .09 }); tone(1480, .12, { vol: .09, at: .07 }); }
+  };
+})();
 
 /* ---------- helpers ------------------------------------------------ */
 const TIERS = ["Elevate Go-er", "Servant", "Ministry Head", "Youth Coordinator"];
@@ -331,6 +376,7 @@ function ride(floors = 1) {
   tr.classList.remove("go"); void tr.offsetWidth;
   tr.style.setProperty("--dist", 480 * floors + "px"); tr.style.setProperty("--dur", dur + "ms");
   tr.classList.add("go"); bg.classList.add("moving");
+  Sfx.whoosh(dur); setTimeout(() => Sfx.ding(), dur - 80);
   clearTimeout(rideTimer); rideTimer = setTimeout(() => bg.classList.remove("moving"), dur - 150);
 }
 const share = (qid, name) => (liveN[qid] || 0) >= 5 ? Math.round(((live[qid] || {})[name] || 0) / liveN[qid] * 100) : null;
@@ -428,8 +474,9 @@ function askView(msg = "", val = "") {
   $("#f").onsubmit = e => {
     e.preventDefault();
     const hit = matchAnswer(q, inp.value);
-    if (!hit) { $("#note").textContent = "That one is not on the board. Try another answer."; return; }
+    if (!hit) { Sfx.bad(); $("#note").textContent = "That one is not on the board. Try another answer."; return; }
     state.answers.push({ q: q.id, a: hit.name, tier: hit.tier, pts: TIER_PTS[hit.tier] });
+    Sfx.lock(); setTimeout(() => Sfx.reveal(hit.tier), 140);
     persist(); stage = "reveal"; render();
   };
 }
@@ -447,7 +494,7 @@ function revealView() {
     <ul class="bars" aria-label="Rarity tiers">${TIERS.map((_, t) => t).reverse().map(row).join("")}</ul>
     ${sh !== null ? `<p class="hint">${sh}% of players picked ${esc(a.a)}.</p>` : ""}
     <button class="btn" id="nx"><span>${last ? "Reach the roof" : "Next floor"}</span></button></div>`;
-  $("#nx").onclick = () => { stage = last ? "done" : "ask"; render(); ride(last ? 3 : 1); $("#app").scrollIntoView({ block: "start" }); };
+  $("#nx").onclick = () => { stage = last ? "done" : "ask"; render(); ride(last ? 3 : 1); if (last) setTimeout(() => Sfx.fanfare(), 1700); $("#app").scrollIntoView({ block: "start" }); };
   $("#nx").focus();
 }
 
@@ -471,7 +518,7 @@ function doneView() {
     <p class="toast" id="toast" role="status">${esc(toast)}</p></div>`;
   $("#sh").onclick = async () => {
     const txt = shareText();
-    try { await navigator.clipboard.writeText(txt); toast = "Copied. Paste it anywhere."; }
+    try { await navigator.clipboard.writeText(txt); toast = "Copied. Paste it anywhere."; Sfx.blip(); }
     catch { toast = txt.replace(/\n/g, "  |  "); }
     $("#toast").textContent = toast;
   };
@@ -486,6 +533,11 @@ setInterval(() => {
     if (nowMs - lastSave > 2000) { lastSave = nowMs; lsSet(state); }
   }
 }, 250);
+
+document.addEventListener("pointerdown", e => { if (e.target.closest(".btn")) Sfx.tap(); });
+const sndBtn = $("#snd");
+function paintSnd() { sndBtn.textContent = Sfx.muted() ? "Sound off" : "Sound on"; sndBtn.setAttribute("aria-pressed", String(!Sfx.muted())); }
+sndBtn.onclick = () => { Sfx.toggle(); paintSnd(); }; paintSnd();
 
 if (state.answers.length >= QS.length) stage = "done";
 render();
