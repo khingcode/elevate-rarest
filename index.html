@@ -253,6 +253,42 @@ const BANK = [
    "Meditation:2|scripture meditation","Journaling:2","Fellowship:2","Service:2|serving","Giving:2|tithing|generosity","Scripture Memorization:2|memorizing scripture|scripture memory",
    "Confession:3","Silence:3","Solitude:3","Sabbath:3|rest","Gratitude:3|thanksgiving","Evangelism:3|sharing the gospel","Accountability:3",
    "Simplicity:4","Submission:4","Celebration:4","Spiritual Direction:4|guidance","Lectio Divina:4","Stewardship:4"] },
+ { id:"fruit", cat:"Faith", text:"Name a fruit of the Spirit", a:[
+   "Love:1","Joy:1","Peace:1",
+   "Patience:2|longsuffering","Kindness:2",
+   "Faithfulness:3|faith","Goodness:3",
+   "Gentleness:4|meekness","Self-Control:4|self control|temperance"] },
+ { id:"place", cat:"Bible", text:"Name a place in the Bible", a:[
+   "Jerusalem:1","Bethlehem:1","Egypt:1","Garden of Eden:1|eden","Nazareth:1",
+   "Babylon:2","Jordan River:2|jordan","Galilee:2|sea of galilee","Jericho:2","Mount Sinai:2|sinai","Calvary:2|golgotha","Nineveh:2","Sodom:2|sodom and gomorrah|gomorrah","Damascus:2",
+   "Bethany:3","Capernaum:3","Gethsemane:3|garden of gethsemane","Canaan:3|promised land","Samaria:3","Antioch:3","Ephesus:3","Corinth:3","Rome:3","Mount Carmel:3|carmel","Red Sea:3","Mount Ararat:3|ararat","Babel:3|tower of babel","Mount Zion:3|zion","Mount of Olives:3|olives",
+   "Patmos:4","Philippi:4","Cana:4","Emmaus:4","Bethel:4","Hebron:4","Shiloh:4","Gilgal:4","Goshen:4","Beersheba:4","Ur:4|ur of the chaldeans","Haran:4","Tyre:4","Sidon:4","Smyrna:4","Laodicea:4","Mount Moriah:4|moriah"] },
+ { id:"commandment", cat:"Bible", text:"Name one of the Ten Commandments", a:[
+   "Do not murder:1|do not kill|you shall not kill|thou shalt not kill|you shall not murder|murder|kill|dont kill|no murder",
+   "Do not steal:1|you shall not steal|thou shalt not steal|steal|stealing|dont steal|no stealing",
+   "Honor your father and mother:1|honour your father and mother|honor your parents|honour your parents|honor thy father and thy mother|obey your parents",
+   "Have no other gods before me:2|no other gods|you shall have no other gods|worship only god|no other gods before me",
+   "Do not commit adultery:2|adultery|you shall not commit adultery|thou shalt not commit adultery|dont commit adultery",
+   "Do not lie:2|do not bear false witness|false witness|bear false witness|you shall not bear false witness|dont lie|do not give false testimony",
+   "Do not covet:3|covet|coveting|you shall not covet|dont covet|do not covet your neighbors house",
+   "Do not take the Lord's name in vain:3|take the lords name in vain|misuse the name of the lord|name in vain|dont take gods name in vain|do not misuse the lords name",
+   "Keep the Sabbath holy:3|remember the sabbath day|keep the sabbath|sabbath|rest on the sabbath|remember the sabbath",
+   "Do not make idols:4|no idols|graven images|do not make graven images|you shall not make idols|idols|carved images"] },
+ { id:"tribe", cat:"Bible", text:"Name one of the twelve tribes of Israel", a:[
+   "Judah:1","Levi:1","Benjamin:1",
+   "Reuben:2","Simeon:2","Dan:2","Joseph:2",
+   "Gad:3","Asher:3","Ephraim:3","Manasseh:3",
+   "Naphtali:4","Issachar:4","Zebulun:4"] },
+ { id:"woman", cat:"Bible", text:"Name a woman in the Bible", a:[
+   "Mary:1|mary mother of jesus|virgin mary|mother mary","Eve:1","Esther:1","Ruth:1","Sarah:1",
+   "Martha:2","Mary Magdalene:2","Rebekah:2|rebecca","Rachel:2","Leah:2","Deborah:2","Hannah:2","Naomi:2","Delilah:2","Bathsheba:2","Jezebel:2","Elizabeth:2",
+   "Miriam:3","Rahab:3","Lydia:3","Priscilla:3","Abigail:3","Tamar:3","Hagar:3","Dorcas:3|tabitha","Anna:3","Lois:3","Eunice:3","Phoebe:3","Jael:3","Michal:3","Zipporah:3","Huldah:3","Salome:3","Joanna:3","Susanna:3","Lot's Wife:3|lots wife","Sapphira:3","Herodias:3","Bilhah:3",
+   "Euodia:4|evodia","Syntyche:4","Junia:4","Keturah:4","Orpah:4","Zilpah:4","Vashti:4","Abishag:4","Athaliah:4","Shiphrah:4","Puah:4","Rizpah:4","Dinah:4","Gomer:4","Chloe:4","Claudia:4","Candace:4","Damaris:4","Tryphena:4","Persis:4"] },
+ { id:"shepherd", cat:"Bible", text:"Name a Bible character who was a shepherd", a:[
+   "David:1","Moses:1","Jesus:1|the good shepherd|good shepherd|jesus christ",
+   "Abel:2","Jacob:2","The Nativity Shepherds:2|shepherds|christmas shepherds|the shepherds|shepherds at bethlehem","Abraham:2",
+   "Amos:3","Joseph:3","Rachel:3","Isaac:3",
+   "Jethro:4","Laban:4","Jabal:4","Nabal:4"] }
 ];
 
 /* ---------- sound (Web Audio, no files; starts only after a click) ---- */
@@ -338,7 +374,7 @@ const EPOCH = Date.UTC(2026, 10, 18);
 const now = new Date();
 const dayN = Math.floor((Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()) - EPOCH) / 864e5);
 const DATE = now.toISOString().slice(0, 10);
-const DAYKEY = DATE + ":v6";   // bump when the question set changes so old saves are ignored
+const DAYKEY = DATE + ":v7";   // bump when the question set changes so old saves are ignored
 const PUZZLE = Math.max(1, dayN + 1);
 const PER_DAY = 5;
 function rng(seed) { return () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
