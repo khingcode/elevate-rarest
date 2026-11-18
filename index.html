@@ -182,7 +182,7 @@ footer { color: #6f6f6f; font-size: 12px; border-top: 1px solid var(--line); pad
 }
 </style>
 
-<audio id="bgm" src="music.mp3" loop preload="none"></audio>
+<audio id="bgm" src="music-trimmed.mp3" loop preload="none"></audio>
 <div class="bg" id="bg" aria-hidden="true"><div class="streaks"></div><div class="track" id="track"></div></div>
 <div class="shaft">
   <header class="top">
@@ -692,7 +692,7 @@ let triedBlob = false;
 bgm.addEventListener("error", async () => {
   /* some viewers refuse direct media files; retry once through fetch + a blob URL */
   if (!triedBlob) { triedBlob = true;
-    try { const r = await fetch("music.mp3"); if (r.ok) { bgm.src = URL.createObjectURL(await r.blob()); if (musicStarted) playMusic(); return; } } catch {} }
+    try { const r = await fetch("music-trimmed.mp3"); if (r.ok) { bgm.src = URL.createObjectURL(await r.blob()); if (musicStarted) playMusic(); return; } } catch {} }
   musicOK = false; musBtn.hidden = true;
 });
 bgm.addEventListener("canplay", () => { musBtn.hidden = false; }, { once: true });
