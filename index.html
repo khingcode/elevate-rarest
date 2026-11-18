@@ -239,9 +239,9 @@ const total = () => state.answers.reduce((s, a) => s + a.pts, 0);
 const RARITIES = [
   { name: "Common",       max: Infinity }, // 20%+
   { name: "Elevate Go-er", max: 20 },      // 8-20%
-  { name: "Backstage",    max: 8 },        // 3-8%
-  { name: "Headliner",    max: 3 },        // 1-3%
-  { name: "Keynote",      max: 1 }         // under 1%
+  { name: "Servant",    max: 8 },        // 3-8%
+  { name: "Ministry Head",    max: 3 },        // 1-3%
+  { name: "Youth Coordinator",      max: 1 }         // under 1%
 ];
 const rarityIdx = pct => pct < 1 ? 4 : pct < 3 ? 3 : pct < 8 ? 2 : pct < 20 ? 1 : 0;
 const label = pct => RARITIES[rarityIdx(pct)].name;
