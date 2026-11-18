@@ -186,8 +186,9 @@ footer { color: #6f6f6f; font-size: 12px; border-top: 1px solid var(--line); pad
     <h1 class="wm sm" aria-label="Elevate">EL<span style="display:contents">E</span>V<svg class="chev" viewBox="0 0 100 100" aria-hidden="true"><path d="M0 100 L36 0 L64 0 L100 100 L74 100 L50 28 L26 100Z"/></svg>TE</h1>
     <div class="right"><div class="meta" id="meta"></div><button class="snd" id="snd" type="button" aria-pressed="true">Sound on</button></div>
   </header>
-  <main id="app" aria-live="polite"></main>
   <div class="owner" id="owner" hidden><span>Owner tools · only you see this</span><button class="btn ghost" id="replay" type="button"><span>Replay today</span></button></div>
+  <main id="app" aria-live="polite"></main>
+  
   <footer>Every answer has a fixed tier set by the Elevate team. The higher the tier, the more points it scores.</footer>
 </div>
 
@@ -488,7 +489,7 @@ async function connect() {
   try {
     const user = await claude.use("user"); db = await claude.use("db");
     try { isOwner = !!(user && await user.isOwner()); } catch {}
-    $("#owner").hidden = !isOwner;
+    paintOwner();
     if (!db || !user) { dbState = "offline"; renderMeta(); return; }
     uid = await user.id();
     if (!uid) { db = null; dbState = "offline"; renderMeta(); return; }
@@ -613,6 +614,12 @@ setInterval(() => {
 }, 250);
 
 document.addEventListener("pointerdown", e => { if (e.target.closest(".btn")) Sfx.tap(); });
+/* Fallback when the viewer cannot tell who you are (preview panes, solo mode): open the page with this hash.
+   It only unlocks Replay for your own run on this device, so it is a convenience, not security. */
+const OWNER_HASH = "#replay-ek29x";
+const hashOwner = () => location.hash === OWNER_HASH;
+function paintOwner() { $("#owner").hidden = !(isOwner || hashOwner()); }
+addEventListener("hashchange", paintOwner); paintOwner();
 $("#replay").onclick = () => { Sfx.tap(); replay(); };
 const sndBtn = $("#snd");
 function paintSnd() { sndBtn.textContent = Sfx.muted() ? "Sound off" : "Sound on"; sndBtn.setAttribute("aria-pressed", String(!Sfx.muted())); }
