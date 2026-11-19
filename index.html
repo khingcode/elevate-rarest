@@ -466,11 +466,12 @@ function legend(active = -1, counts = null) {
   const row = t => `<li class="${t === active ? "here" : ""} ${t === TIERS.length - 1 ? "top" : ""}"><div class="lt"><span class="ln">${TIERS[t]}${pips(t)}</span><span class="ld">${counts ? `${counts[t]} answer${counts[t] === 1 ? "" : "s"} on the board. ` : ""}${TIER_DESC[t]}</span></div><span class="lp">${TIER_PTS[t]} pts</span></li>`;
   return `<div class="legend"><div class="lg-end">▲ Rarest · most points</div><ul>${TIERS.map((_, t) => t).reverse().map(row).join("")}</ul><div class="lg-end low">▼ Most common · fewest points</div></div>`;
 }
-/* Player rank by total score, as a share of the maximum. Same four names as the answer tiers. */
+/* Player rank by total score, as a share of the maximum. Own names, separate from the answer tiers. */
 const BAND_MIN = [0, 0.5, 0.7, 0.9];
 const maxScore = () => QS.length * TIER_PTS[TIER_PTS.length - 1];
 const rankIdx = t => BAND_MIN.reduce((r, m, i) => t >= Math.round(m * maxScore()) ? i : r, 0);
-const rankOf = t => TIERS[rankIdx(t)];
+const RANKS = ["Lobby", "Mezzanine", "Sky Deck", "Rooftop"];   // score ranks: deliberately different from the answer tiers
+const rankOf = t => RANKS[rankIdx(t)];
 const bandRange = i => { const lo = Math.round(BAND_MIN[i] * maxScore()), hi = i + 1 < BAND_MIN.length ? Math.round(BAND_MIN[i + 1] * maxScore()) - 1 : maxScore(); return i === 0 ? `up to ${hi}` : i === BAND_MIN.length - 1 ? `${lo}+` : `${lo}-${hi}`; };
 let rideTimer = 0;
 function ride(floors = 1) {
@@ -684,7 +685,7 @@ function doneView() {
       <div class="yourtime">Your time <b>${fmt(state.ms)}</b>${liveTimes.length > 1 ? `<span>Average ${fmt(liveTimes.reduce((a, b) => a + b, 0) / liveTimes.length)}</span>` : ""}</div>
       ${beat !== null ? `<p class="hint">Higher than ${beat}% of today's ${liveScores.length} finishers.</p>` : ""}</div>
     <p class="eyebrow">Score ranks · set by your total points</p>
-    <ul class="ladder" aria-label="Score ranks">${TIERS.map((n, i) => i).reverse().map(i => { const r = rankIdx(t), st = i === r ? "here" : i < r ? "passed" : ""; return `<li class="${st}"><span class="fl">FLOOR<b>${i + 1}</b></span><span class="nm"><span class="ln">${TIERS[i]}</span><span class="lr">${bandRange(i)} pts</span></span><span class="st">${i === r ? CHEV + "You are here" : i < r ? "Passed" : "Keep climbing"}</span></li>`; }).join("")}</ul>
+    <ul class="ladder" aria-label="Score ranks">${TIERS.map((n, i) => i).reverse().map(i => { const r = rankIdx(t), st = i === r ? "here" : i < r ? "passed" : ""; return `<li class="${st}"><span class="fl">FLOOR<b>${i + 1}</b></span><span class="nm"><span class="ln">${RANKS[i]}</span><span class="lr">${bandRange(i)} pts</span></span><span class="st">${i === r ? CHEV + "You are here" : i < r ? "Passed" : "Keep climbing"}</span></li>`; }).join("")}</ul>
     <div class="blocks" aria-hidden="true">${state.answers.map(a => `<i style="--o:${(0.3 + a.pts / 100 * 0.7).toFixed(2)}"></i>`).join("")}</div>
     <div class="rows">${state.answers.map((a, i) => `<div class="row"><span class="n">${i + 1}</span><span class="qq">${esc(QS[i].text)}</span><span class="aa">${esc(a.a)} <span class="tag" style="font-size:10px;vertical-align:middle">${label(a.tier)}</span></span><span class="pp"><b>${a.pts}</b>pts</span></div>`).join("")}</div>
     <div class="actions"><button class="btn" id="sv"><span>Save image</span></button><button class="btn ghost" id="sh"><span>Copy text</span></button><span class="clock">Next run in <b id="clk">${untilReset()}</b></span></div>
