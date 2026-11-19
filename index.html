@@ -451,12 +451,12 @@ const EPOCH = Date.UTC(2026, 10, 18);
 const now = new Date();
 const dayN = Math.floor((Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()) - EPOCH) / 864e5);
 const DATE = now.toISOString().slice(0, 10);
-const DAYKEY = DATE + ":v17";   // bump when the question set changes so old saves are ignored
+const DAYKEY = DATE + ":v18";   // bump when the question set changes so old saves are ignored
 const PUZZLE = Math.max(1, dayN + 1);
-const PER_DAY = 5;
+const PER_DAY = 6;
 function rng(seed) { return () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
 /* Each day takes the questions used least recently, so a question never repeats the next day
-   while the bank has more than 5 questions it can swap in. Same result for every player on a given day. */
+   while the bank has more than 6 questions it can swap in. Same result for every player on a given day. */
 const LOCAL_CATS = new Set(["Elevate", "Exalt", "Worship", "Conference"]);
 function todaysQuestions() {
   const n = Math.max(0, dayN), per = Math.min(PER_DAY, BANK.length);
@@ -670,7 +670,7 @@ function shareText() {
 /* ---------- result image (canvas -> PNG) --------------------------- */
 async function makeCard() {
   try { await Promise.all([document.fonts.load('italic 900 60px Archivo'), document.fonts.load('700 30px "JetBrains Mono"')]); } catch {}
-  const W = 1080, H = 1480, c = document.createElement("canvas"); c.width = W; c.height = H;
+  const W = 1080, H = Math.max(1480, 840 + QS.length * 104 + 140), c = document.createElement("canvas"); c.width = W; c.height = H;
   const x = c.getContext("2d"), ORANGE = "#ef4b2b", DISP = 'italic 900 {S}px Archivo, "Arial Black", sans-serif', MONO = '700 {S}px "JetBrains Mono", monospace';
   const font = (tpl, size, stretch) => { x.font = tpl.replace("{S}", size); try { x.fontStretch = stretch || "normal"; } catch {} };
   const t = total(), idx = rankIdx(t);
