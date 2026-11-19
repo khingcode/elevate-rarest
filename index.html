@@ -186,6 +186,8 @@ footer { color: #6f6f6f; font-size: 12px; border-top: 1px solid var(--line); pad
 @media (prefers-reduced-motion: no-preference) {
   .fill { transition: width .7s cubic-bezier(.2,.8,.2,1); }
   .reveal, .res { animation: rise .35s ease-out; }
+  #app.still .reveal, #app.still .res { animation: none; }
+  #app.still .fill { transition: none; }
   @keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
 }
 </style>
@@ -551,10 +553,13 @@ function untilReset() {
   return [h, m, s].map(n => String(n).padStart(2, "0")).join(":");
 }
 
+let lastView = "";
 function render() {
   renderMeta();
   const app = $("#app");
   if (state.answers.length >= QS.length && stage !== "reveal") stage = "done";
+  // Live data arriving (saves, other players) re-draws the same screen: do not replay the entrance fade, or it flickers.
+  const view = stage + ":" + state.answers.length; app.classList.toggle("still", view === lastView); lastView = view;
   if (stage === "intro") {
     const started = state.answers.length > 0;
     app.innerHTML = `<div class="res" style="display:flex;flex-direction:column;gap:26px">
