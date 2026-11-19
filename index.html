@@ -1,4 +1,4 @@
-<title>Elevate Rarest</title>
+<title>Elevate Matina Rarest</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -57,6 +57,7 @@ button, input { font: inherit; color: inherit; }
 }
 .wm .chev { height: .8em; width: .88em; margin: 0 .01em .02em .02em; fill: var(--accent); flex: none; transform: skewX(-9deg); }
 .wm.sm { font-size: 22px; }
+.wm .sub { font-family: var(--mono); font-style: normal; font-weight: 700; font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: var(--accent); margin-left: 10px; align-self: flex-end; padding-bottom: 3px; font-stretch: 100%; }
 .wm.xl { font-size: clamp(48px, 15vw, 112px); }
 
 header.top { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding-bottom: 14px; border-bottom: 2px solid var(--fg); }
@@ -196,13 +197,13 @@ footer { color: #6f6f6f; font-size: 12px; border-top: 1px solid var(--line); pad
 <div class="bg" id="bg" aria-hidden="true"><div class="streaks"></div><div class="track" id="track"></div></div>
 <div class="shaft">
   <header class="top">
-    <h1 class="wm sm" aria-label="Elevate">EL<span style="display:contents">E</span>V<svg class="chev" viewBox="0 0 100 100" aria-hidden="true"><path d="M0 100 L36 0 L64 0 L100 100 L74 100 L50 28 L26 100Z"/></svg>TE</h1>
+    <h1 class="wm sm" aria-label="Elevate Matina">EL<span style="display:contents">E</span>V<svg class="chev" viewBox="0 0 100 100" aria-hidden="true"><path d="M0 100 L36 0 L64 0 L100 100 L74 100 L50 28 L26 100Z"/></svg>TE<span class="sub">Matina</span></h1>
     <div class="right"><div class="meta" id="meta"></div><div class="toggles"><button class="snd" id="mus" type="button" aria-pressed="true" hidden>Music on</button><button class="snd" id="snd" type="button" aria-pressed="true">Sound on</button></div></div>
   </header>
   <div class="owner" id="owner" hidden><span>Owner tools · only you see this</span><button class="btn ghost" id="replay" type="button"><span>Replay today</span></button></div>
   <main id="app" aria-live="polite"></main>
   
-  <footer>Every answer has a fixed tier set by the Elevate team. The higher the tier, the more points it scores.</footer>
+  <footer>Every answer has a fixed tier set by the Elevate Matina team. The higher the tier, the more points it scores.</footer>
 </div>
 
 <script>
@@ -612,10 +613,10 @@ function render() {
     const started = state.answers.length > 0;
     app.innerHTML = `<div class="res" style="display:flex;flex-direction:column;gap:26px">
       <div style="display:flex;flex-direction:column;gap:14px">
-        <p class="eyebrow">Daily No. ${PUZZLE}</p>
+        <p class="eyebrow">Elevate Matina · Daily No. ${PUZZLE}</p>
         <h2 class="wm xl" aria-label="Rarest">R${CHEV}REST</h2>
       </div>
-      <p class="lead">${QS.length} questions about Elevate and CCF. Pick the answer almost nobody else thinks of. The rarer the answer, the higher you ride.</p>
+      <p class="lead">${QS.length} questions about Elevate Matina. Pick the answer almost nobody else thinks of. The rarer the answer, the higher you ride.</p>
       <ol class="how">
         <li><b>01</b><span>Type any answer. If it is not on the board, it does not count and you can try again.</span></li>
         <li><b>02</b><span>Every answer sits in a tier. The rarer the answer, the higher the tier and the more points it scores. The tier list is below.</span></li>
@@ -670,7 +671,7 @@ function revealView() {
 
 function shareText() {
   const sq = state.answers.map(a => ["⬜", "🟨", "🟧", "🟥"][a.tier]).join("");
-  return `ELEVATE RAREST No. ${PUZZLE}\n${total()}/${QS.length * 100} · ${rankOf(total())} · ${fmt(state.ms)}\n${sq}`;
+  return `ELEVATE MATINA RAREST No. ${PUZZLE}\n${total()}/${QS.length * 100} · ${rankOf(total())} · ${fmt(state.ms)}\n${sq}`;
 }
 /* ---------- result image (canvas -> PNG) --------------------------- */
 async function makeCard() {
@@ -689,6 +690,7 @@ async function makeCard() {
     if (part) { x.fillText(part, px, wy); px += x.measureText(part).width + 2; }
     else { const w = 62, h = 76; x.save(); x.translate(px, wy - h + 6); x.transform(1, 0, -.16, 1, 0, 0); x.fillStyle = ORANGE; x.beginPath(); x.moveTo(0, h); x.lineTo(w * .36, 0); x.lineTo(w * .64, 0); x.lineTo(w, h); x.lineTo(w * .74, h); x.lineTo(w * .5, h * .28); x.lineTo(w * .26, h); x.closePath(); x.fill(); x.restore(); px += w + 4; }
   }
+  font(MONO, 30); x.fillStyle = ORANGE; x.fillText("M A T I N A", px + 18, wy - 2);
   font(MONO, 26); x.fillStyle = "#9b9b9b"; x.textAlign = "right"; x.fillText("DAILY NO. " + PUZZLE, W - 80, 96); x.fillText(DATE, W - 80, 134); x.textAlign = "left";
   x.fillStyle = "#fff"; x.fillRect(80, 176, W - 160, 4);
   // rank
@@ -712,21 +714,21 @@ async function makeCard() {
     font(MONO, 22); x.fillStyle = "#9b9b9b"; x.textAlign = "right"; x.fillText(tn, W - 240, y + 82); x.textAlign = "left";
     font(MONO, 44); x.fillStyle = a.tier === 3 ? ORANGE : "#fff"; x.textAlign = "right"; x.fillText(String(a.pts), W - 80, y + 70); x.textAlign = "left";
   });
-  font(MONO, 22); x.fillStyle = "#6f6f6f"; x.fillText("ELEVATE RAREST · PICK THE ANSWER NOBODY ELSE DOES", 80, H - 56);
+  font(MONO, 22); x.fillStyle = "#6f6f6f"; x.fillText("ELEVATE MATINA RAREST · PICK THE ANSWER NOBODY ELSE DOES", 80, H - 56);
   return new Promise(res => c.toBlob(b => res(b), "image/png"));
 }
 async function saveImage() {
   const note = $("#toast"); note.textContent = "Making your image…";
   let blob; try { blob = await makeCard(); } catch { blob = null; }
   if (!blob) { note.textContent = "Could not make the image in this browser. Use Copy text instead."; return; }
-  const name = `elevate-rarest-${PUZZLE}.png`;
+  const name = `elevate-matina-rarest-${PUZZLE}.png`;
   try { const dl = await claude.use("downloads"); if (dl) { await dl.save({ filename: name, data: blob }); note.textContent = "Saved. Check your downloads."; Sfx.blip(); return; } }
   catch (e) { if (e && e.code === "declined") { note.textContent = "Save cancelled."; return; } }
   try { const f = new File([blob], name, { type: "image/png" }); if (navigator.canShare && navigator.canShare({ files: [f] })) { await navigator.share({ files: [f] }); note.textContent = "Shared."; return; } }
   catch (e) { if (e && e.name === "AbortError") { note.textContent = ""; return; } }
   const url = URL.createObjectURL(blob);
   try { const a = document.createElement("a"); a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove(); note.textContent = "Saved. Check your downloads."; Sfx.blip(); } catch {}
-  $("#preview").innerHTML = `<p class="hint">If nothing downloaded, press and hold the image to save it.</p><img src="${url}" alt="Your Elevate Rarest result" style="width:100%;max-width:420px;display:block;margin-top:8px">`;
+  $("#preview").innerHTML = `<p class="hint">If nothing downloaded, press and hold the image to save it.</p><img src="${url}" alt="Your Elevate Matina Rarest result" style="width:100%;max-width:420px;display:block;margin-top:8px">`;
 }
 function doneView() {
   const t = total(), beat = liveScores.length > 1 ? Math.round(liveScores.filter(s => s < t).length / liveScores.length * 100) : null;
