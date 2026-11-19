@@ -360,12 +360,16 @@ const HONOR = /^(kuya|tito|tita|ate|bro|sis)(?=.{2})/;
 const norm = s => String(s).toLowerCase().replace(/^\s*the\s+/, "").normalize("NFKD").replace(/[̀-ͯ]/g, "").replace(/&/g, "and").replace(/[^a-z0-9]+/g, "").replace(HONOR, "");
 const CHEV = '<svg class="chev" viewBox="0 0 100 100" aria-hidden="true"><path d="M0 100 L36 0 L64 0 L100 100 L74 100 L50 28 L26 100Z"/></svg>';
 
+const STOP = new Set("the a an of to for his her their its in on at and with by from jesus christ lord is was i answer miracle man people person".split(" "));
+const stem = w => w.length > 4 ? w.replace(/(ing|ed|es|s)$/, "") : (w.length > 3 ? w.replace(/s$/, "") : w);
+const toks = s => String(s).toLowerCase().normalize("NFKD").replace(/[\u0300-\u036f]/g, "").replace(/&/g, " and ").replace(/'s\b/g, "").replace(/[^a-z0-9]+/g, " ").trim().split(" ").filter(w => w && !STOP.has(w)).map(stem);
 function parseQ(q) {
   return { ...q, items: q.a.map(s => {
     const [head, ...al] = s.split("|"); const i = head.lastIndexOf(":");
     const name = head.slice(0, i), tier = +head.slice(i + 1) - 1;
     const nb = name.match(/^([123]) (.+)/); const ord = nb ? [["", "first", "second", "third"], ["", "1st", "2nd", "3rd"]].map(o => o[nb[1]] + " " + nb[2]) : [];
-    return { name, tier, keys: [name, ...al, ...ord, ...(q.id === "king" ? ["king " + name] : [])].map(norm) };
+    const raws = [name, ...al, ...ord, ...(q.id === "king" ? ["king " + name] : [])];
+    return { name, tier, keys: raws.map(norm), tks: raws.map(toks) };
   }) };
 }
 function lev(a, b) {
@@ -385,7 +389,15 @@ function matchAnswer(q, raw) {
       if (d < bd) { bd = d; best = it; tie = false; } else if (d === bd && it !== best) tie = true; }
     if (bd <= tol && !tie) return best;
   }
-  return null;
+  /* forgiving pass: ignore filler words and word endings, accept partial / longer phrasings */
+  const t = toks(raw); if (!t.length) return null;
+  const same = (a, b) => a.length === b.length && a.every(w => b.includes(w));
+  const sub = (a, b) => a.every(w => b.includes(w));
+  const pick = fn => { const hit = q.items.filter(it => it.tks.some(fn)); return hit.length === 1 ? hit[0] : null; };
+  return pick(kt => kt.length && same(t, kt))
+      || pick(kt => kt.length >= 2 && sub(kt, t))
+      || ((t.length >= 2 || t[0].length >= 4) ? pick(kt => kt.length && sub(t, kt)) : null);
+
 }
 
 /* ---------- the day ------------------------------------------------ */
