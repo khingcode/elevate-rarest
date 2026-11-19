@@ -324,7 +324,12 @@ const BANK = [
    "Couch:1|couches|sofa","Registration Table:1|reg table|registration|reg|registration desk","Room 1:1|room one|r1","Room 2:1|room two|r2","Room 3:1|room three|r3",
    "Music Room:2|music","Admin Office:2|admin|office|admin room","Storage Room:2|storage|stockroom","Front Stage:2|front area|stage|front",
    "Water Dispenser:3|water dispenser area|water area|dispenser|water station","Elevator:3|lift","Club's Bakery:3|clubs bakery|bakery|club bakery",
-   "Rooftop:4|roofdeck|roof deck|roof|rooftop area","Basement:4|basement area"] }
+   "Rooftop:4|roofdeck|roof deck|roof|rooftop area","Basement:4|basement area"] },
+ { id:"reg", cat:"Elevate", text:"Name something you'd find at the registration table", a:[
+   "Pen:1|ballpen|ballpoint|pens","Sign-in Sheet:1|attendance sheet|attendance|signin sheet|logbook|list of names|masterlist","Name Tag:1|name tags|nametag|sticker|name sticker|id","Volunteers:1|volunteer|staff|registration team|greeter",
+   "Laptop:2|computer","Marker:2|markers|permanent marker|sign pen","Tape:2|masking tape|scotch tape","Clipboard:2","Lanyard:2|lanyards","Scissors:2",
+   "Stapler:3|staple wire","QR Code:3|qr|scanner|qr scanner","Tablet:3|ipad","Cash Box:3|cashbox|money box|cash|money","Banner:3|tarpaulin|tarp|signage|poster","Flyers:3|flyer|brochure|pamphlet|handouts","Receipt:3|receipts|official receipt|ticket|tickets","Water Bottle:3|water|tumbler",
+   "Paper Cutter:4","Extension Cord:4|extension|power strip|extension wire","Hole Puncher:4|puncher|hole punch","Glue:4|glue stick|paste","Ruler:4","Wristband:4|wristbands|bracelet","Rubber Bands:4|rubber band|paper clips|paper clip|clips","Sanitizer:4|alcohol|hand sanitizer","Stamp:4|stamp pad|ink pad","Snacks:4|candy|food"] }
 ];
 
 /* ---------- sound (Web Audio, no files; starts only after a click) ---- */
@@ -422,7 +427,7 @@ const EPOCH = Date.UTC(2026, 10, 18);
 const now = new Date();
 const dayN = Math.floor((Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()) - EPOCH) / 864e5);
 const DATE = now.toISOString().slice(0, 10);
-const DAYKEY = DATE + ":v10";   // bump when the question set changes so old saves are ignored
+const DAYKEY = DATE + ":v11";   // bump when the question set changes so old saves are ignored
 const PUZZLE = Math.max(1, dayN + 1);
 const PER_DAY = 5;
 function rng(seed) { return () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
