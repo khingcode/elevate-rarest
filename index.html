@@ -329,7 +329,18 @@ const BANK = [
    "Pen:1|ballpen|ballpoint|pens","Sign-in Sheet:1|attendance sheet|attendance|signin sheet|logbook|list of names|masterlist","Name Tag:1|name tags|nametag|sticker|name sticker|id","Volunteers:1|volunteer|staff|registration team|greeter",
    "Laptop:2|computer","Marker:2|markers|permanent marker|sign pen","Tape:2|masking tape|scotch tape","Clipboard:2","Lanyard:2|lanyards","Scissors:2",
    "Stapler:3|staple wire","QR Code:3|qr|scanner|qr scanner","Tablet:3|ipad","Cash Box:3|cashbox|money box|cash|money","Banner:3|tarpaulin|tarp|signage|poster","Flyers:3|flyer|brochure|pamphlet|handouts","Receipt:3|receipts|official receipt|ticket|tickets","Water Bottle:3|water|tumbler",
-   "Paper Cutter:4","Extension Cord:4|extension|power strip|extension wire","Hole Puncher:4|puncher|hole punch","Glue:4|glue stick|paste","Ruler:4","Wristband:4|wristbands|bracelet","Rubber Bands:4|rubber band|paper clips|paper clip|clips","Sanitizer:4|alcohol|hand sanitizer","Stamp:4|stamp pad|ink pad","Snacks:4|candy|food"] }
+   "Paper Cutter:4","Extension Cord:4|extension|power strip|extension wire","Hole Puncher:4|puncher|hole punch","Glue:4|glue stick|paste","Ruler:4","Wristband:4|wristbands|bracelet","Rubber Bands:4|rubber band|paper clips|paper clip|clips","Sanitizer:4|alcohol|hand sanitizer","Stamp:4|stamp pad|ink pad","Snacks:4|candy|food"] },
+ /* Dreams and jobs: tiers are my estimate. Edit freely. */
+ { id:"dream", cat:"Bible", text:"Name a Bible character who had a dream", a:[
+   "Joseph:1|joseph son of jacob|joseph the dreamer|joseph the dreamer of genesis|joseph jacobs son","Jacob:1|israel|jacobs ladder","Daniel:1","Nebuchadnezzar:1|king nebuchadnezzar|nebuchadnezzar of babylon","Pharaoh:1|pharaoh of egypt|egyptian pharaoh",
+   "Solomon:2|king solomon","Joseph, Husband of Mary:2|joseph husband of mary|joseph mary's husband|joseph of nazareth|joseph the carpenter|joseph jesus father|joseph father of jesus|jesus earthly father","The Wise Men:2|wise men|magi|three kings|three wise men","Pilate's Wife:2|pilates wife|wife of pilate|claudia procula",
+   "Pharaoh's Cupbearer:3|cupbearer|chief cupbearer|butler|chief butler","Pharaoh's Baker:3|baker|chief baker","Peter:3|simon peter|peters vision|rooftop vision","Paul:3|saul of tarsus|apostle paul","Abimelech:3|king abimelech","Laban:3","Gideon:3","Cornelius:3","Ananias:3",
+   "Midianite Soldier:4|midianite|the midianite|soldier in gideons army","Eliphaz:4|eliphaz the temanite","Zechariah:4","Ezekiel:4","John:4|john of patmos|apostle john","Isaiah:4","Samuel:4"] },
+ { id:"job", cat:"Bible", text:"Name a job or work that was mentioned in the Bible", a:[
+   "Fisherman:1|fishermen|fisher|fishing|fisher of men","Shepherd:1|sheep herder|shepherding|herder","Carpenter:1|woodworker|woodcutter","Tax Collector:1|publican|tax man|taxman|collector of taxes","Farmer:1|farming|plowman|husbandman|farmhand","King:1|ruler","Priest:1|high priest|priests",
+   "Doctor:2|physician|healer|medic","Tentmaker:2|tent maker|tent making","Soldier:2|warrior|centurion|army|guard","Prophet:2|prophets","Builder:2|mason|stonemason|architect|construction","Judge:2","Teacher:2|rabbi|scribe teacher","Musician:2|singer|harpist|psalmist","Potter:2|clay maker","Slave:2|servant|servants|bondservant","Scribe:2|writer|copyist",
+   "Cupbearer:3|butler","Gardener:3|gardening|keeper of the garden","Weaver:3|weaving","Vinedresser:3|vine dresser|winemaker|vintner|vineyard worker|grape picker","Midwife:3|midwives","Merchant:3|trader|businessman|seller of purple|dealer","Tanner:3|leather worker","Silversmith:3|goldsmith|metalworker|silver worker|blacksmith|smith","Innkeeper:3|inn keeper","Fuller:3|launderer|washerman","Magician:3|sorcerer|sorcery|astrologer","Hunter:3",
+   "Perfumer:4|perfume maker|apothecary","Embalmer:4|embalming","Coppersmith:4|copper smith","Moneychanger:4|money changer|moneychangers","Gatekeeper:4|doorkeeper|door keeper|porter","Watchman:4|watcher|sentinel","Lawyer:4|attorney","Charioteer:4|chariot driver|chariot","Governor:4|procurator|proconsul","Treasurer:4","Barber:4","Dyer:4|dye maker|purple dealer","Spinner:4|spinning","Shipbuilder:4|sailor|ship master|helmsman"] }
 ];
 
 /* ---------- sound (Web Audio, no files; starts only after a click) ---- */
@@ -427,7 +438,7 @@ const EPOCH = Date.UTC(2026, 10, 18);
 const now = new Date();
 const dayN = Math.floor((Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()) - EPOCH) / 864e5);
 const DATE = now.toISOString().slice(0, 10);
-const DAYKEY = DATE + ":v11";   // bump when the question set changes so old saves are ignored
+const DAYKEY = DATE + ":v12";   // bump when the question set changes so old saves are ignored
 const PUZZLE = Math.max(1, dayN + 1);
 const PER_DAY = 5;
 function rng(seed) { return () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
