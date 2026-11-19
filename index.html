@@ -236,14 +236,6 @@ const BANK = [
    "Solid Ground:2","One God:2","Anchor of Our Lives:2|anchor","By Your Love:2",
    "So Faithful:3","Hands of Grace:3","Stand Strong:3",
    "I Will Go:4","Reliably True:4","All Glorious:4","Land of the Living:4"] },
- { id:"bring", cat:"Conference", text:"Name something you'd bring to a three-day conference", a:[
-   "Notebook:1|journal","Pen:1|ballpen|ballpoint","Bible:1","Water Bottle:1|tumbler|water","Powerbank:1|power bank|charger|phone charger","Jacket:1|hoodie",
-   "Snacks:1|food","Towel:1","Extra Clothes:1|clothes|change of clothes","Toiletries:1|toothbrush","Umbrella:1","ID:1|lanyard id|valid id","Phone:1|cellphone|mobile phone",
-   "Earphones:2|headphones|earbuds","Medicine:2|meds|vitamins","Face Mask:2|mask","Tissue:2|wet wipes|wipes","Cash:2|money|pera","Sunscreen:2","Pillow:2","Camera:2","Wallet:2",
-   "Friend:3|a friend|friends|kaibigan|bring a friend|guest",
-   "Handheld Fan:3|fan|pamaypay","Slippers:3|flip flops|tsinelas","Blanket:3","Alcohol:3|sanitizer|hand sanitizer","Laptop:3","Sticky Notes:3","Highlighters:3|highlighter",
-   "Unbeliever:4|non-believer|nonbeliever|non believer|unbelievers|someone who doesnt know jesus",
-   "Banig:4|sleeping mat","Candle:4|candles","Whistle:4","Folding Chair:4|chair","3-in-1 Coffee:4|instant coffee|coffee","Ear Plugs:4|earplugs","Sleeping Bag:4","Mosquito Repellent:4|off lotion|insect repellent","Cup Noodles:4|noodles|instant noodles","Flashlight:4|torch"] },
  { id:"book", cat:"Bible", text:"Name a book of the Bible", a:[
    "Genesis:1","Exodus:1","Psalms:1|psalm","Proverbs:1","Matthew:1","John:1","Romans:1","Revelation:1|revelations",
    "Mark:2","Luke:2","Acts:2","Isaiah:2","Daniel:2","Ruth:2","Esther:2","Job:2","Philippians:2","James:2","1 Corinthians:2","Ephesians:2","Joshua:2","Judges:2","Jonah:2",
@@ -459,7 +451,7 @@ const EPOCH = Date.UTC(2026, 10, 18);
 const now = new Date();
 const dayN = Math.floor((Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()) - EPOCH) / 864e5);
 const DATE = now.toISOString().slice(0, 10);
-const DAYKEY = DATE + ":v16";   // bump when the question set changes so old saves are ignored
+const DAYKEY = DATE + ":v17";   // bump when the question set changes so old saves are ignored
 const PUZZLE = Math.max(1, dayN + 1);
 const PER_DAY = 5;
 function rng(seed) { return () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
