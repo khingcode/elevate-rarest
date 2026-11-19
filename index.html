@@ -154,13 +154,21 @@ p { margin: 0; }
 .legend li.here .pips i.on { background: #000; }
 .legend .lg-end { font-family: var(--mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); }
 .legend .lg-end.low { color: var(--dim); }
-.ladder { list-style: none; margin: 0; padding: 0 10px 0 0; display: grid; gap: 6px; }
-.ladder li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2px 12px; align-items: center; padding: 10px 14px; border: 2px solid var(--line); transform: skewX(-9deg); color: var(--dim); }
+.ladder { list-style: none; margin: 0; padding: 0 10px 0 0; display: grid; gap: 6px; position: relative; }
+.ladder li { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 2px 14px; align-items: center; padding: 10px 14px 10px 10px; border: 2px dashed var(--line); transform: skewX(-9deg); color: var(--dim); position: relative; }
 .ladder li > * { transform: skewX(9deg); }
+.ladder .fl { display: grid; place-items: center; min-width: 54px; padding: 6px 8px; border: 2px solid currentColor; font-family: var(--mono); font-weight: 700; font-size: 11px; letter-spacing: .08em; line-height: 1.1; text-align: center; }
+.ladder .fl b { display: block; font-family: var(--display); font-style: italic; font-weight: 900; font-size: 24px; letter-spacing: 0; }
+.ladder .nm { display: grid; gap: 2px; min-width: 0; }
 .ladder .ln { font-family: var(--display); font-style: italic; font-weight: 900; font-stretch: 118%; text-transform: uppercase; letter-spacing: -.01em; font-size: 18px; }
 .ladder .lr { font-family: var(--mono); font-size: 12px; font-variant-numeric: tabular-nums; }
-.ladder li.here { background: var(--accent); border-color: var(--accent); color: #000; }
-.ladder li.passed { color: var(--fg); border-color: var(--fg); }
+.ladder .st { font-family: var(--mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; text-align: right; display: grid; justify-items: end; gap: 4px; }
+.ladder .st .chev { width: 18px; height: 18px; fill: currentColor; }
+.ladder li.passed { color: var(--fg); border: 2px solid var(--fg); }
+.ladder li.here { background: var(--accent); border: 2px solid var(--accent); color: #000; box-shadow: 0 0 26px rgba(239,75,43,.45); animation: carGlow 2.2s ease-in-out infinite; }
+.ladder li.here .fl { background: #000; color: var(--accent); border-color: #000; }
+@keyframes carGlow { 50% { box-shadow: 0 0 40px rgba(239,75,43,.75); } }
+@media (prefers-reduced-motion: reduce) { .ladder li.here { animation: none; } }
 .timer { display: flex; justify-content: space-between; align-items: baseline; font-family: var(--mono); font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--dim); }
 .timer b { font-size: 20px; letter-spacing: 0; color: var(--fg); font-variant-numeric: tabular-nums; }
 .yourtime { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; font-family: var(--mono); font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--dim); }
@@ -676,7 +684,7 @@ function doneView() {
       <div class="yourtime">Your time <b>${fmt(state.ms)}</b>${liveTimes.length > 1 ? `<span>Average ${fmt(liveTimes.reduce((a, b) => a + b, 0) / liveTimes.length)}</span>` : ""}</div>
       ${beat !== null ? `<p class="hint">Higher than ${beat}% of today's ${liveScores.length} finishers.</p>` : ""}</div>
     <p class="eyebrow">Score ranks · set by your total points</p>
-    <ul class="ladder" aria-label="Score ranks">${TIERS.map((n, i) => i).reverse().map(i => `<li class="${i === rankIdx(t) ? "here" : i < rankIdx(t) ? "passed" : ""}"><span class="ln">${TIERS[i]}</span><span class="lr">${bandRange(i)} pts${i === rankIdx(t) ? " · you" : ""}</span></li>`).join("")}</ul>
+    <ul class="ladder" aria-label="Score ranks">${TIERS.map((n, i) => i).reverse().map(i => { const r = rankIdx(t), st = i === r ? "here" : i < r ? "passed" : ""; return `<li class="${st}"><span class="fl">FLOOR<b>${i + 1}</b></span><span class="nm"><span class="ln">${TIERS[i]}</span><span class="lr">${bandRange(i)} pts</span></span><span class="st">${i === r ? CHEV + "You are here" : i < r ? "Passed" : "Keep climbing"}</span></li>`; }).join("")}</ul>
     <div class="blocks" aria-hidden="true">${state.answers.map(a => `<i style="--o:${(0.3 + a.pts / 100 * 0.7).toFixed(2)}"></i>`).join("")}</div>
     <div class="rows">${state.answers.map((a, i) => `<div class="row"><span class="n">${i + 1}</span><span class="qq">${esc(QS[i].text)}</span><span class="aa">${esc(a.a)} <span class="tag" style="font-size:10px;vertical-align:middle">${label(a.tier)}</span></span><span class="pp"><b>${a.pts}</b>pts</span></div>`).join("")}</div>
     <div class="actions"><button class="btn" id="sv"><span>Save image</span></button><button class="btn ghost" id="sh"><span>Copy text</span></button><span class="clock">Next run in <b id="clk">${untilReset()}</b></span></div>
