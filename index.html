@@ -340,7 +340,12 @@ const BANK = [
    "Fisherman:1|fishermen|fisher|fishing|fisher of men","Shepherd:1|sheep herder|shepherding|herder","Carpenter:1|woodworker|woodcutter","Tax Collector:1|publican|tax man|taxman|collector of taxes","Farmer:1|farming|plowman|husbandman|farmhand","King:1|ruler","Priest:1|high priest|priests",
    "Doctor:2|physician|healer|medic","Tentmaker:2|tent maker|tent making","Soldier:2|warrior|centurion|army|guard","Prophet:2|prophets","Builder:2|mason|stonemason|architect|construction","Judge:2","Teacher:2|rabbi|scribe teacher","Musician:2|singer|harpist|psalmist","Potter:2|clay maker","Slave:2|servant|servants|bondservant","Scribe:2|writer|copyist",
    "Cupbearer:3|butler","Gardener:3|gardening|keeper of the garden","Weaver:3|weaving","Vinedresser:3|vine dresser|winemaker|vintner|vineyard worker|grape picker","Midwife:3|midwives","Merchant:3|trader|businessman|seller of purple|dealer","Tanner:3|leather worker","Silversmith:3|goldsmith|metalworker|silver worker|blacksmith|smith","Innkeeper:3|inn keeper","Fuller:3|launderer|washerman","Magician:3|sorcerer|sorcery|astrologer","Hunter:3",
-   "Perfumer:4|perfume maker|apothecary","Embalmer:4|embalming","Coppersmith:4|copper smith","Moneychanger:4|money changer|moneychangers","Gatekeeper:4|doorkeeper|door keeper|porter","Watchman:4|watcher|sentinel","Lawyer:4|attorney","Charioteer:4|chariot driver|chariot","Governor:4|procurator|proconsul","Treasurer:4","Barber:4","Dyer:4|dye maker|purple dealer","Spinner:4|spinning","Shipbuilder:4|sailor|ship master|helmsman"] }
+   "Perfumer:4|perfume maker|apothecary","Embalmer:4|embalming","Coppersmith:4|copper smith","Moneychanger:4|money changer|moneychangers","Gatekeeper:4|doorkeeper|door keeper|porter","Watchman:4|watcher|sentinel","Lawyer:4|attorney","Charioteer:4|chariot driver|chariot","Governor:4|procurator|proconsul","Treasurer:4","Barber:4","Dyer:4|dye maker|purple dealer","Spinner:4|spinning","Shipbuilder:4|sailor|ship master|helmsman"] },
+ { id:"wcomm", cat:"Elevate", text:"Name one member from the Elevate working comm GC", a:[
+   "Adam:1","Cart:1","Earl:1","Kahil:1","Khing:1","Kuya Drich:1|drich","Myles:1","Pinky:1","Rafael:1|raf","Rhoyd:1","Shiji:1","Shy:1","Vee:1","Tel:1","Yves:1",
+   "Ameerah:2|amee","Catherine:2|kate","Christine:2","Deborah:2|deb","Eunice:2","Euwee:2","Fern:2","Izack:2","Jace:2","Jean:2|nicey","John Cutuy:2|john yutuc|cutuy|yutuc","Karl:2|karl gatab|gatab","Kath:2","Kean:2","Kriza:2|tats","Mark:2","Micah:2","Nico Tiu:2|nico|nico tui|tiu","Raniel:2","Yanna:2",
+   "Allyson:3|ally","Angela:3","Carla:3","Claire:3","Esther:3","Harmony:3","James:3","Joash:3|jm","John Michael:3","Lebron:3","Leomer:3|yecyec","Meldred:3","Moira:3","Princess:3|seph","Prinzes:3","Reena:3","Rhiah:3","Sophia:3","Wea:3",
+   "Tan2:4|tan|tan 2","Danella:4","Erica:4","Giulian:4|giul|giu lian","Grace:4","Jamila:4|miggy","Joshua:4|joshua santos","Karlene:4","Luke:4","Maria:4","Michelle:4","Miya:4","Phil:4","Romz:4|romeo","Yvonne:4"] }
 ];
 
 /* ---------- sound (Web Audio, no files; starts only after a click) ---- */
@@ -438,7 +443,7 @@ const EPOCH = Date.UTC(2026, 10, 18);
 const now = new Date();
 const dayN = Math.floor((Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()) - EPOCH) / 864e5);
 const DATE = now.toISOString().slice(0, 10);
-const DAYKEY = DATE + ":v12";   // bump when the question set changes so old saves are ignored
+const DAYKEY = DATE + ":v13";   // bump when the question set changes so old saves are ignored
 const PUZZLE = Math.max(1, dayN + 1);
 const PER_DAY = 5;
 function rng(seed) { return () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
