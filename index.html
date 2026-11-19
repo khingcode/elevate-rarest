@@ -403,7 +403,7 @@ const HONOR = /^(kuya|tito|tita|ate|bro|sis)(?=.{2})/;
 const norm = s => String(s).toLowerCase().replace(/^\s*the\s+/, "").normalize("NFKD").replace(/[̀-ͯ]/g, "").replace(/&/g, "and").replace(/[^a-z0-9]+/g, "").replace(HONOR, "");
 const CHEV = '<svg class="chev" viewBox="0 0 100 100" aria-hidden="true"><path d="M0 100 L36 0 L64 0 L100 100 L74 100 L50 28 L26 100Z"/></svg>';
 
-const STOP = new Set("the a an of to for his her their its in on at and with by from jesus christ lord is was i answer miracle man people person".split(" "));
+const STOP = new Set("the a an of to for his her their its in on at and with by from jesus christ lord is was i answer miracle man people person prophet prophetess apostle".split(" "));
 const stem = w => w.length > 4 ? w.replace(/(ing|ed|es|s)$/, "") : (w.length > 3 ? w.replace(/s$/, "") : w);
 const toks = s => String(s).toLowerCase().normalize("NFKD").replace(/[\u0300-\u036f]/g, "").replace(/&/g, " and ").replace(/'s\b/g, "").replace(/[^a-z0-9]+/g, " ").trim().split(" ").filter(w => w && !STOP.has(w)).map(stem);
 function parseQ(q) {
