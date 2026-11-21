@@ -364,7 +364,12 @@ const BANK = [
    "Speaking in Tongues:1|tongues|speaking tongues","Prophecy:1|prophesy","Healing:1|gifts of healing","Wisdom:1|word of wisdom","Faith:1",
    "Knowledge:2|word of knowledge","Miracles:2|working of miracles|miracle","Discernment:2|discerning of spirits|discerning spirits","Teaching:2","Serving:2|service|ministry|helps",
    "Interpretation of Tongues:3|interpreting tongues|interpretation","Encouragement:3|exhortation|encouraging","Giving:3|generosity","Leadership:3|leading|governing|governments","Mercy:3|showing mercy|compassion","Administration:3|admin",
-   "Apostleship:4|apostle","Evangelism:4|evangelist","Pastoring:4|pastor|shepherding","Hospitality:4"] }
+   "Apostleship:4|apostle","Evangelism:4|evangelist","Pastoring:4|pastor|shepherding","Hospitality:4"] },
+ { id:"ministry", cat:"Elevate", text:"Name one ministry from CCF or Elevate", a:[
+   "Elevate Youth Ministry:1|elevate|elevate youth|elevate ministry|youth ministry|youth","NXTGEN Children's Ministry:1|nxtgen|next gen|nextgen|nxt gen|childrens ministry|children's ministry|kids ministry","B1G Singles Ministry:1|b1g|big|singles|singles ministry","Exalt/Tech:1|exalt|tech|tech ministry|exalt ministry",
+   "Across Family Ministry:2|across|family ministry|across family","Movement Men's Ministry:2|movement|mens ministry|men's ministry|movement men","Women 2 Women Ministry:2|women 2 women|w2w|women to women|women2women","Programs:2|programs ministry|program","Registration:2|registration ministry|reg","Pastoral Care:2|pastoral|pastoral care ministry",
+   "Marketing:3|marketing ministry","Sports Ministry:3|sports|sport ministry","WOW:3|women of worth|women of wisdom|women of worship|wow ministry","Ignite Ministry:3|ignite","CCF Ministry Institute:3|ministry institute|cmi|institute",
+   "Marketplace Ministry:4|marketplace|gmen|g men|workplace for winners","International Church Planting:4|icp|ccf beyond|beyond|church planting|missions","CCFMI:4|ccf mi|christ's commission foundation ministries|christs commission foundation|healing hands|healing hands medical ministry|ccf tulong tayo|tulong tayo|notalone|not alone|notalone program"] }
 ];
 
 /* ---------- sound (Web Audio, no files; starts only after a click) ---- */
@@ -462,7 +467,7 @@ const EPOCH = Date.UTC(2026, 10, 18);
 const now = new Date();
 const dayN = Math.floor((Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()) - EPOCH) / 864e5);
 const DATE = now.toISOString().slice(0, 10);
-const DAYKEY = DATE + ":v22";   // bump when the question set changes so old saves are ignored
+const DAYKEY = DATE + ":v23";   // bump when the question set changes so old saves are ignored
 const PUZZLE = Math.max(1, dayN + 1);
 const PER_DAY = 6;
 function rng(seed) { return () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
