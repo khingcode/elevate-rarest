@@ -3,6 +3,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,100..900;1,62..125,100..900&family=JetBrains+Mono:wght@500;700&display=swap">
+<script>try{if(localStorage.getItem("elevate-rarest:theme")==="light")document.documentElement.setAttribute("data-theme","light")}catch(e){}</script>
 <style>
 /* Layout: one centred 640px "elevator shaft" column; floors (questions) stack inside it, results open onto the roof. */
 :root {
@@ -13,11 +14,28 @@
   --dim: #9b9b9b;
   --accent: #ef4b2b;
   --accent-ink: #000000;
+  --grid: #1d1d1d;
+  --stripe: rgba(255,255,255,.07);
+  --stripe2: rgba(255,255,255,.08);
+  --hov: #ffffff;
   --bad: #ffb199;
   --display: "Archivo", "Arial Black", Impact, sans-serif;
   --body: "Archivo", system-ui, sans-serif;
   --mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
   color-scheme: dark;
+}
+:root[data-theme="light"] {
+  --bg: #ffffff;
+  --panel: #f4f2f0;
+  --line: #d6d2ce;
+  --fg: #0a0a0a;
+  --dim: #6a6560;
+  --bad: #b3361b;
+  --grid: #ebe8e5;
+  --stripe: rgba(0,0,0,.08);
+  --stripe2: rgba(0,0,0,.08);
+  --hov: #0a0a0a;
+  color-scheme: light;
 }
 * { box-sizing: border-box; }
 html, body { background: var(--bg); }
@@ -31,17 +49,17 @@ body {
 /* moving shaft background: pattern period is 160px, so any multiple of 160px is a seamless loop */
 .bg { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none;
   background:
-    linear-gradient(90deg, transparent 12px, #1d1d1d 12px 13px, transparent 13px calc(100% - 13px), #1d1d1d calc(100% - 13px) calc(100% - 12px), transparent calc(100% - 12px)); }
+    linear-gradient(90deg, transparent 12px, var(--grid) 12px 13px, transparent 13px calc(100% - 13px), var(--grid) calc(100% - 13px) calc(100% - 12px), transparent calc(100% - 12px)); }
 .bg .track { position: absolute; left: 0; right: 0; top: -1920px; height: calc(100% + 3840px);
-  background: repeating-linear-gradient(to bottom, rgba(255,255,255,.07) 0 1px, transparent 1px 160px); will-change: transform; }
+  background: repeating-linear-gradient(to bottom, var(--stripe) 0 1px, transparent 1px 160px); will-change: transform; }
 .bg .track::before, .bg .track::after { content: ""; position: absolute; top: 0; bottom: 0; width: 14px; opacity: .5;
   background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='40' viewBox='0 0 14 40'%3E%3Cpath d='M0 30 L7 12 L14 30 L14 36 L7 18 L0 36Z' fill='%23ef4b2b'/%3E%3C/svg%3E") repeat-y 0 0 / 14px 40px; }
 .bg .track::before { left: max(18px, calc(50% - 372px)); }
 .bg .track::after { right: max(18px, calc(50% - 372px)); }
 .bg .streaks { position: absolute; inset: 0; opacity: 0; transition: opacity .25s;
-  background: repeating-linear-gradient(90deg, transparent 0 53px, rgba(239,75,43,.18) 53px 54px, transparent 54px 131px, rgba(255,255,255,.08) 131px 132px); }
+  background: repeating-linear-gradient(90deg, transparent 0 53px, rgba(239,75,43,.18) 53px 54px, transparent 54px 131px, var(--stripe2) 131px 132px); }
 .bg.moving .streaks { opacity: 1; }
-.bg::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to bottom, #000 0, transparent 22%, transparent 70%, #000 100%); }
+.bg::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to bottom, var(--bg) 0, transparent 22%, transparent 70%, var(--bg) 100%); }
 @keyframes ride { from { transform: translateY(0); } to { transform: translateY(var(--dist, 480px)); } }
 .bg .track.go { animation: ride var(--dur, 1000ms) cubic-bezier(.65, 0, .25, 1) both; }
 @media (prefers-reduced-motion: reduce) { .bg .track.go { animation: none; } .bg .streaks { display: none; } }
@@ -69,7 +87,7 @@ header.top { display: flex; justify-content: space-between; align-items: center;
 .snd[hidden] { display: none; }
 .snd { appearance: none; background: transparent; border: 1px solid var(--line); color: var(--dim); font-family: var(--mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; padding: 4px 10px; cursor: pointer; }
 .snd:hover { color: var(--fg); border-color: var(--fg); }
-.snd[aria-pressed="false"] { color: #666; text-decoration: line-through; }
+.snd[aria-pressed="false"] { color: var(--dim); text-decoration: line-through; }
 .eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); margin: 0; }
 h2.q { font-family: var(--display); font-style: italic; font-weight: 900; font-stretch: 118%; text-transform: uppercase;
   font-size: clamp(30px, 8vw, 46px); line-height: .98; letter-spacing: -0.02em; margin: 0; text-wrap: balance; }
@@ -81,17 +99,17 @@ p { margin: 0; }
   font-family: var(--display); font-style: italic; font-weight: 900; font-stretch: 118%; text-transform: uppercase; letter-spacing: -0.01em;
   font-size: 20px; padding: 16px 28px; transform: skewX(-9deg); transition: background .12s, transform .12s; align-self: flex-start; }
 .btn > span { display: inline-block; transform: skewX(9deg); }
-.btn:hover { background: #fff; }
+.btn:hover { background: var(--hov); color: var(--bg); }
 .btn:active { transform: skewX(-9deg) translateY(2px); }
 .btn.ghost { background: transparent; color: var(--fg); box-shadow: inset 0 0 0 2px var(--fg); }
-.btn.ghost:hover { background: var(--fg); color: #000; }
+.btn.ghost:hover { background: var(--fg); color: var(--bg); }
 .btn[disabled] { opacity: .35; cursor: default; }
 
 /* floors */
 .floors { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
 .floor { height: 40px; display: grid; place-items: center; font-family: var(--mono); font-weight: 700; font-size: 14px; border: 2px solid var(--line); color: var(--dim); transform: skewX(-9deg); }
 .floor > span { transform: skewX(9deg); }
-.floor.done { background: var(--fg); color: #000; border-color: var(--fg); }
+.floor.done { background: var(--fg); color: var(--bg); border-color: var(--fg); }
 .floor.here { background: var(--accent); color: #000; border-color: var(--accent); }
 
 /* answer input */
@@ -114,7 +132,7 @@ p { margin: 0; }
 .pips { display: inline-flex; gap: 4px; margin-left: 10px; vertical-align: middle; }
 .pips i { width: 14px; height: 8px; background: var(--line); transform: skewX(-9deg); }
 .pips i.on { background: var(--accent); }
-.tag { display: inline-block; font-family: var(--mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; background: var(--fg); color: #000; padding: 3px 8px; }
+.tag { display: inline-block; font-family: var(--mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; background: var(--fg); color: var(--bg); padding: 3px 8px; }
 .bars { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
 .bars li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 12px; align-items: end; }
 .bars .nm { font-weight: 600; overflow-wrap: anywhere; }
@@ -198,7 +216,7 @@ footer { color: #6f6f6f; font-size: 12px; border-top: 1px solid var(--line); pad
 <div class="shaft">
   <header class="top">
     <h1 class="wm sm" aria-label="Elevate Matina">EL<span style="display:contents">E</span>V<svg class="chev" viewBox="0 0 100 100" aria-hidden="true"><path d="M0 100 L36 0 L64 0 L100 100 L74 100 L50 28 L26 100Z"/></svg>TE<span class="sub">Matina</span></h1>
-    <div class="right"><div class="meta" id="meta"></div><div class="toggles"><button class="snd" id="mus" type="button" aria-pressed="true" hidden>Music on</button><button class="snd" id="snd" type="button" aria-pressed="true">Sound on</button></div></div>
+    <div class="right"><div class="meta" id="meta"></div><div class="toggles"><button class="snd" id="theme" type="button" aria-label="Switch between dark and light mode">Light mode</button><button class="snd" id="mus" type="button" aria-pressed="true" hidden>Music on</button><button class="snd" id="snd" type="button" aria-pressed="true">Sound on</button></div></div>
   </header>
   <div class="owner" id="owner" hidden><span>Owner tools · only you see this</span><button class="btn ghost" id="replay" type="button"><span>Replay today</span></button></div>
   <main id="app" aria-live="polite"></main>
@@ -810,6 +828,14 @@ musBtn.onclick = () => {
 };
 document.addEventListener("pointerdown", () => { if (!musicStarted) { musicStarted = true; playMusic(); } }, { once: true });
 document.addEventListener("visibilitychange", () => { if (document.hidden) bgm.pause(); else if (musicStarted) playMusic(); });
+const themeBtn = $("#theme");
+function paintTheme() { const light = document.documentElement.dataset.theme === "light"; themeBtn.textContent = light ? "Dark mode" : "Light mode"; }
+themeBtn.onclick = () => {
+  const light = document.documentElement.dataset.theme !== "light";
+  if (light) document.documentElement.dataset.theme = "light"; else document.documentElement.removeAttribute("data-theme");
+  try { localStorage.setItem("elevate-rarest:theme", light ? "light" : "dark"); } catch {}
+  paintTheme(); Sfx.tap();
+}; paintTheme();
 const sndBtn = $("#snd");
 function paintSnd() { sndBtn.textContent = Sfx.muted() ? "Sound off" : "Sound on"; sndBtn.setAttribute("aria-pressed", String(!Sfx.muted())); }
 sndBtn.onclick = () => { Sfx.toggle(); paintSnd(); }; paintSnd();
