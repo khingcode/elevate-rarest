@@ -230,12 +230,12 @@ footer { text-align: center; font-size: 13px; font-weight: 500; color: var(--pg)
    Tier 1 Elevate Go-er · 2 Servant · 3 Ministry Head · 4 Youth Coordinator
    Honorifics (kuya, tito, ate...) are ignored when matching, so "Earl" matches "Kuya Earl". */
 const BANK = [
- { id:"speaker", cat:"Elevate", text:"Name any speaker who spoke in Elevate before", a:[
+ { id:"speaker", cat:"Elevate", text:"Name any speaker who has spoken at Elevate Matina before", a:[
    "Kuya Earl:1|earl","Kuya Cart:1|cart","Kuya Raf:1|raf",
    "Kuya Karl:2|karl","Kuya Yves:2|yves","Kuya Drich:2|drich",
    "Kuya Khing:3|khing","Kuya Nico Tiu:3|nico tiu|nico","Kuya Kyle:3|kyle",
    "Kuya Ken:4|ken","Tito Dondi:4|dondi","Kuya Mark:4|mark"] },
- { id:"exalt", cat:"Exalt", text:"Name one member from the Exalt ministry", a:[
+ { id:"exalt", cat:"Exalt", text:"Name one member from the Elevate Matina Exalt ministry", a:[
    "Kuya Khing:1|khing","Kuya Yves:1|yves","Kuya Shiji:1|shiji","Kuya Raf:1|raf",
    "Deborah:2|deb","Kuya Nico:2|nico","Kuya Rhoyd:2|rhoyd","Euwee:2","Kahil:2",
    "John:3","Tan2:3|tan|tan 2","Micah:3","James:3","Kean:3","Joash:3|jm|kuya joash|kuya jm",
@@ -250,7 +250,7 @@ const BANK = [
  /* Tiers follow Spotify listen counts (Exalt Worship top tracks screenshot): more listens = easier tier.
     Go-er 1.7M+, Servant 1.0M-1.4M, Ministry Head 600k-800k, Youth Coordinator under 400k.
     The three Elevate Exalt EP songs have no listen data, so they sit in Youth Coordinator until you say otherwise. */
- { id:"song", cat:"Worship", text:"Name an Elevate Worship Song", a:[
+ { id:"song", cat:"Worship", text:"Name an Elevate Matina Worship song", a:[
    "Amazing God:1","I Will Run:1","King Jesus:1",
    "Solid Ground:2","One God:2","Anchor of Our Lives:2|anchor","By Your Love:2",
    "So Faithful:3","Hands of Grace:3","Stand Strong:3",
@@ -331,12 +331,12 @@ const BANK = [
    "Figs:2|fig","Grapes:2|grape","Olives:2|olive","Honey:2","Lentil Stew:2|lentils|stew|red stew","Quail:2","Milk:2","Barley Loaves:2|barley","Pomegranate:2|pomegranates","Dates:2","Passover Lamb:2|lamb|roast lamb",
    "Wheat:3|grain","Locusts:3|locust","Almonds:3|almond","Cucumbers:3|cucumber","Melons:3|melon","Leeks:3|leek","Garlic:3","Onions:3|onion","Cheese:3","Butter:3","Raisin Cakes:3|raisins","Eggs:3|egg","Salt:3","Vinegar:3","Unleavened Bread:3|matzah","Apple:3|apples",
    "Cumin:4","Dill:4|anise","Mint:4","Coriander:4","Spelt:4","Millet:4","Carob Pods:4|husks|carob","Roasted Grain:4|parched grain","Curds:4","Pistachios:4|pistachio","Mandrakes:4|mandrake","Hyssop:4"] },
- { id:"snooze", cat:"Elevate", text:"Name an area within the Snooze building", a:[
+ { id:"snooze", cat:"Elevate", text:"Name an area within the Snooze building, the Elevate Matina venue", a:[
    "Couch:1|couches|sofa","Registration Table:1|reg table|registration|reg|registration desk","Room 1:1|room one|r1","Room 2:1|room two|r2","Room 3:1|room three|r3",
    "Music Room:2|music","Admin Office:2|admin|office|admin room","Storage Room:2|storage|stockroom","Front Stage:2|front area|stage|front",
    "Water Dispenser:3|water dispenser area|water area|dispenser|water station","Elevator:3|lift","Club's Bakery:3|clubs bakery|bakery|club bakery",
    "Rooftop:4|roofdeck|roof deck|roof|rooftop area","Basement:4|basement area"] },
- { id:"reg", cat:"Elevate", text:"Name something you'd find at the registration table", a:[
+ { id:"reg", cat:"Elevate", text:"Name something you'd find at the Elevate Matina registration table", a:[
    "Pen:1|ballpen|ballpoint|pens","Sign-in Sheet:1|attendance sheet|attendance|signin sheet|logbook|list of names|masterlist","Name Tag:1|name tags|nametag|sticker|name sticker|id","Volunteers:1|volunteer|staff|registration team|greeter",
    "Laptop:2|computer","Marker:2|markers|permanent marker|sign pen","Tape:2|masking tape|scotch tape","Clipboard:2","Lanyard:2|lanyards","Scissors:2",
    "Stapler:3|staple wire","QR Code:3|qr|scanner|qr scanner","Tablet:3|ipad","Cash Box:3|cashbox|money box|cash|money","Banner:3|tarpaulin|tarp|signage|poster","Flyers:3|flyer|brochure|pamphlet|handouts","Receipt:3|receipts|official receipt|ticket|tickets","Water Bottle:3|water|tumbler",
@@ -352,7 +352,7 @@ const BANK = [
    "Doctor:2|physician|healer|medic","Tentmaker:2|tent maker|tent making","Soldier:2|warrior|centurion|army|guard","Prophet:2|prophets","Builder:2|mason|stonemason|architect|construction","Judge:2","Teacher:2|rabbi|scribe teacher","Musician:2|singer|harpist|psalmist","Potter:2|clay maker","Slave:2|servant|servants|bondservant","Scribe:2|writer|copyist",
    "Cupbearer:3|butler","Gardener:3|gardening|keeper of the garden","Weaver:3|weaving","Vinedresser:3|vine dresser|winemaker|vintner|vineyard worker|grape picker","Midwife:3|midwives","Merchant:3|trader|businessman|seller of purple|dealer","Tanner:3|leather worker","Silversmith:3|goldsmith|metalworker|silver worker|blacksmith|smith","Innkeeper:3|inn keeper","Fuller:3|launderer|washerman","Magician:3|sorcerer|sorcery|astrologer","Hunter:3",
    "Perfumer:4|perfume maker|apothecary","Embalmer:4|embalming","Coppersmith:4|copper smith","Moneychanger:4|money changer|moneychangers","Gatekeeper:4|doorkeeper|door keeper|porter","Watchman:4|watcher|sentinel","Lawyer:4|attorney","Charioteer:4|chariot driver|chariot","Governor:4|procurator|proconsul","Treasurer:4","Barber:4","Dyer:4|dye maker|purple dealer","Spinner:4|spinning","Shipbuilder:4|sailor|ship master|helmsman"] },
- { id:"wcomm", cat:"Elevate", text:"Name one member from the Elevate working comm GC", a:[
+ { id:"wcomm", cat:"Elevate", text:"Name one member from the Elevate Matina working comm GC", a:[
    "Adam:1","Cart:1","Earl:1","Kahil:1","Khing:1","Kuya Drich:1|drich","Myles:1","Pinky:1","Rafael:1|raf","Rhoyd:1","Shiji:1","Shy:1","Vee:1","Tel:1","Yves:1",
    "Ameerah:2|amee","Catherine:2|kate","Christine:2","Deborah:2|deb","Eunice:2","Euwee:2","Fern:2","Izack:2","Jace:2","Jean:2|nicey","John Cutuy:2|john yutuc|cutuy|yutuc","Karl:2|karl gatab|gatab","Kath:2","Kean:2","Kriza:2|tats","Mark:2","Micah:2","Nico Tiu:2|nico|nico tui|tiu","Raniel:2","Yanna:2",
    "Allyson:3|ally","Angela:3","Carla:3","Claire:3","Esther:3","Harmony:3","James:3","Joash:3|jm","John Michael:3","Lebron:3","Leomer:3|yecyec","Meldred:3","Moira:3","Princess:3|seph","Prinzes:3","Reena:3","Rhiah:3","Sophia:3","Wea:3",
@@ -373,7 +373,7 @@ const BANK = [
    "Notebook:2|journal","Pen:2|ballpen","Slippers:2|flip flops|tsinelas","Pillow:2","Blanket:2","Medicine:2|meds|vitamins","Umbrella:2|raincoat","Flashlight:2|torch","Mosquito Repellent:2|insect repellent|off lotion","Sunscreen:2","Cash:2|money","Earphones:2|headphones|earbuds","Wallet:2",
    "Sleeping Bag:3","Camera:3","Hat:3|cap","Sunglasses:3|shades","Extra Shoes:3|sandals|shoes|sneakers","Playing Cards:3|cards|uno cards|uno","Board Games:3|board game|games","Speaker:3|bluetooth speaker","Guitar:3|ukulele","Book:3|books|novel","Laundry Bag:3|plastic bag|plastic bags|trash bag","First Aid Kit:3|first aid|band aid|bandaids","Friend:3|a friend|friends|kaibigan|bring a friend|guest","Handheld Fan:3|fan","Alcohol:3|sanitizer|hand sanitizer","Tissue:3|wet wipes|wipes","Laptop:3","Mat:3|banig|sleeping mat|yoga mat",
    "Unbeliever:4|non-believer|nonbeliever|non believer|unbelievers|someone who doesnt know jesus","Tent:4","Hammock:4","Binoculars:4","Compass:4","Rope:4","Pocket Knife:4|swiss knife|knife|multitool","Lantern:4|camping lantern","Marshmallows:4|smores|s'mores","Poncho:4","Hiking Boots:4|hiking shoes|boots","Folding Chair:4|chair","Cooler:4|ice chest","Coffee:4|3-in-1 coffee|instant coffee","Cup Noodles:4|noodles|instant noodles","Ear Plugs:4|earplugs","Eye Mask:4|sleep mask","Highlighters:4|highlighter","Whistle:4","Candle:4|candles","Drone:4","Swimsuit:4|swimwear|bathing suit|trunks"] },
- { id:"musicroom", cat:"Elevate", text:"Name something you'd find in the music room", a:[
+ { id:"musicroom", cat:"Elevate", text:"Name something you'd find in the Elevate Matina music room", a:[
    "Guitar:1|acoustic guitar|electric guitar|guitars","Drums:1|drum set|drum kit|drum|drumset","Keyboard:1|piano|synth|keys|synthesizer","Microphone:1|mic|mics|microphones","Speaker:1|speakers|monitor speaker","Amplifier:1|amp|guitar amp|amps",
    "Cables:2|cable|wires|wire|xlr|xlr cable|guitar cable|audio cable","Bass Guitar:2|bass","Music Stand:2|music stands|sheet stand","Mixer:2|audio mixer|sound mixer|soundboard|mixing console","Headphones:2|headset|earphones","Chairs:2|chair|monoblock","Chord Charts:2|sheet music|lyrics|chords|songbook|music sheets|song sheets","Aircon:2|air conditioner|ac|air conditioning",
    "Guitar Picks:3|pick|picks|plectrum","Drumsticks:3|drum sticks|sticks|drumstick","Capo:3","Tuner:3|guitar tuner|clip on tuner","Cajon:3","Mic Stand:3|mic stands|microphone stand","Laptop:3|computer","Extension Cord:3|extension|power strip|extension wire","Stool:3|drum stool|drum throne|bench","Guitar Strap:3|strap","Whiteboard:3|white board|board","Electric Fan:3|fan|stand fan","Water Bottle:3|water|tumbler","Guitar Stand:3|stand|keyboard stand",
@@ -383,7 +383,7 @@ const BANK = [
    "Knowledge:2|word of knowledge","Miracles:2|working of miracles|miracle","Discernment:2|discerning of spirits|discerning spirits","Teaching:2","Serving:2|service|ministry|helps",
    "Interpretation of Tongues:3|interpreting tongues|interpretation","Encouragement:3|exhortation|encouraging","Giving:3|generosity","Leadership:3|leading|governing|governments","Mercy:3|showing mercy|compassion","Administration:3|admin",
    "Apostleship:4|apostle","Evangelism:4|evangelist","Pastoring:4|pastor|shepherding","Hospitality:4"] },
- { id:"ministry", cat:"Elevate", text:"Name one ministry from CCF or Elevate", a:[
+ { id:"ministry", cat:"Elevate", text:"Name one ministry from CCF or Elevate Matina", a:[
    "Elevate Youth Ministry:1|elevate|elevate youth|elevate ministry|youth ministry|youth","NXTGEN Children's Ministry:1|nxtgen|next gen|nextgen|nxt gen|childrens ministry|children's ministry|kids ministry","B1G Singles Ministry:1|b1g|big|singles|singles ministry","Exalt/Tech:1|exalt|tech|tech ministry|exalt ministry","Marketing:1|marketing ministry",
    "Across Family Ministry:2|across|family ministry|across family","Movement Men's Ministry:2|movement|mens ministry|men's ministry|movement men","Women 2 Women Ministry:2|women 2 women|w2w|women to women|women2women","Programs:2|programs ministry|program","Registration:2|registration ministry|reg",
    "Sports Ministry:3|sports|sport ministry","WOW:3|women of worth|women of wisdom|women of worship|wow ministry","Ignite Ministry:3|ignite","CCF Ministry Institute:3|ministry institute|cmi|institute",
@@ -664,7 +664,7 @@ function askView(msg = "", val = "") {
   const i = state.answers.length, q = QS[i];
   $("#app").innerHTML = `<div class="ask">
     ${floors(i, false)}
-    <p class="eyebrow">${esc(q.cat)} · Floor ${i + 1}</p>
+    <p class="eyebrow">${esc(LOCAL_CATS.has(q.cat) ? "Elevate Matina" : q.cat)} · Floor ${i + 1}</p>
     <h2 class="q">${esc(q.text)}</h2>
     <form class="field" id="f" autocomplete="off">
       <input id="ans" type="text" placeholder="Type your answer" maxlength="60" aria-label="Your answer" autocapitalize="words" spellcheck="false" value="${esc(val)}">
